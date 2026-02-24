@@ -11,4 +11,12 @@
       <ProjectReference Include="..\Streakly.Core\Streakly.Core.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Folder Include="Auth\" />
+      <Folder Include="DAL\" />
+      <Folder Include="Exceptions\" />
+      <Folder Include="Security\" />
+      <Folder Include="Time\" />
+    </ItemGroup>
+
 </Project>
