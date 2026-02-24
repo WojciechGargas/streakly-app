@@ -12,10 +12,12 @@ public class User
     public FullName FullName { get; private set; }
     public UserRole Role { get; private set; }
     public DateTime CreatedAt { get; private set; }
+    public DateTime? LastLoggedAtUtc { get; private set; }
+    public IEnumerable<Activity> Activities { get; private set; }
     
     
     public User(UserId userId, Email email, Username username, Password password,
-        FullName fullName, UserRole role, DateTime createdAt)
+        FullName fullName, UserRole role, DateTime createdAt,  IEnumerable<Activity> activities)
     {
         UserId = userId;
         Email = email;
@@ -24,5 +26,6 @@ public class User
         FullName = fullName;
         Role = role;
         CreatedAt = createdAt;
+        Activities = activities;
     }
 }

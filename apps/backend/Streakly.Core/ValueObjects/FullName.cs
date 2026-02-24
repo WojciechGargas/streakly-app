@@ -2,7 +2,7 @@
 
 namespace Streakly.Core.ValueObjects;
 
-public class FullName
+public sealed record FullName
 {
     public string Value { get; }
 
