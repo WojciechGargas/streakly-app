@@ -1,0 +1,46 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Streakly.Api", "Streakly.Api\Streakly.Api.csproj", "{D56559A5-273B-4810-A427-5C855616D537}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Streakly.Core", "Streakly.Core\Streakly.Core.csproj", "{0FEC886F-970D-48B9-81FC-249B2BC8CEFB}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Streakly.Application", "Streakly.Application\Streakly.Application.csproj", "{FE67BA03-3A94-4925-B345-713F6680B862}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Streakly.Infrastructure", "Streakly.Infrastructure\Streakly.Infrastructure.csproj", "{B8515289-1957-4B0A-8998-723490EDFE6B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Streakly.Tests.Unit", "..\..\tests\Streakly.Tests.Unit\Streakly.Tests.Unit.csproj", "{F047CF95-60E3-4AE5-A559-2A2CA1024131}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Streakly.Tests.Integration", "..\..\tests\Streakly.Tests.Integration\Streakly.Tests.Integration.csproj", "{07F97A33-9CC9-4F64-A92C-21635713E440}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{D56559A5-273B-4810-A427-5C855616D537}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D56559A5-273B-4810-A427-5C855616D537}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D56559A5-273B-4810-A427-5C855616D537}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D56559A5-273B-4810-A427-5C855616D537}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0FEC886F-970D-48B9-81FC-249B2BC8CEFB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0FEC886F-970D-48B9-81FC-249B2BC8CEFB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0FEC886F-970D-48B9-81FC-249B2BC8CEFB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0FEC886F-970D-48B9-81FC-249B2BC8CEFB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FE67BA03-3A94-4925-B345-713F6680B862}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FE67BA03-3A94-4925-B345-713F6680B862}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FE67BA03-3A94-4925-B345-713F6680B862}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FE67BA03-3A94-4925-B345-713F6680B862}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B8515289-1957-4B0A-8998-723490EDFE6B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B8515289-1957-4B0A-8998-723490EDFE6B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B8515289-1957-4B0A-8998-723490EDFE6B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B8515289-1957-4B0A-8998-723490EDFE6B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F047CF95-60E3-4AE5-A559-2A2CA1024131}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F047CF95-60E3-4AE5-A559-2A2CA1024131}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F047CF95-60E3-4AE5-A559-2A2CA1024131}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F047CF95-60E3-4AE5-A559-2A2CA1024131}.Release|Any CPU.Build.0 = Release|Any CPU
+		{07F97A33-9CC9-4F64-A92C-21635713E440}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{07F97A33-9CC9-4F64-A92C-21635713E440}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{07F97A33-9CC9-4F64-A92C-21635713E440}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{07F97A33-9CC9-4F64-A92C-21635713E440}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal

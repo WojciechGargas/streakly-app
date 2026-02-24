@@ -1,0 +1,5 @@
+﻿/apps/backend/.idea/
+/diff.txt
+**/bin/
+**/obj/
+.vs/
