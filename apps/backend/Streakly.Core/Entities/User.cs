@@ -28,4 +28,8 @@ public class User
         CreatedAt = createdAt;
         Activities = activities;
     }
+
+    public User()
+    {
+    }
 }

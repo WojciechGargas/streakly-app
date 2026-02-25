@@ -39,5 +39,9 @@ public class Activity
         Type = type;
         Completed = completed;
     }
+
+    public Activity()
+    {
+    }
     
 }

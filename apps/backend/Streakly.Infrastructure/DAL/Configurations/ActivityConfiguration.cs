@@ -11,5 +11,9 @@ internal sealed class ActivityConfiguration : IEntityTypeConfiguration<Activity>
     {
         builder.Property(x => x.UserId)
             .HasConversion(x => x.Value, x => new UserId(x));
+        builder.Property(x => x.Name)
+            .HasConversion(x => x.Value, x => new ActivityName(x));
+        builder.Property(x => x.Description)
+            .HasConversion(x => x.Value, x => new ActivityDescription(x));
     }
 }
