@@ -1,0 +1,15 @@
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using Streakly.Core.Entities;
+using Streakly.Core.ValueObjects;
+
+namespace Streakly.Infrastructure.DAL.Configurations;
+
+internal sealed class ActivityConfiguration : IEntityTypeConfiguration<Activity>
+{
+    public void Configure(EntityTypeBuilder<Activity> builder)
+    {
+        builder.Property(x => x.UserId)
+            .HasConversion(x => x.Value, x => new UserId(x));
+    }
+}

@@ -5,8 +5,8 @@ namespace Streakly.Core.Repositories;
 
 public interface IUserRepository
 {
-    Task<User> GetUserByIdAsync(UserId userId);
-    Task<User> GetUserByEmailAsync(Email email);
-    Task<User> GetUserByUsernameAsync(Username username);
+    Task<User?> GetUserByIdAsync(UserId userId);
+    Task<User?> GetUserByEmailAsync(Email email);
+    Task<User?> GetUserByUsernameAsync(Username username);
     Task AddUserAsync(User user);
 }
