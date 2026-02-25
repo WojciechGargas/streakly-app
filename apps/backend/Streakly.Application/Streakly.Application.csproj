@@ -10,8 +10,4 @@
       <ProjectReference Include="..\Streakly.Core\Streakly.Core.csproj" />
     </ItemGroup>
 
-    <ItemGroup>
-      <Folder Include="Security\" />
-    </ItemGroup>
-
 </Project>

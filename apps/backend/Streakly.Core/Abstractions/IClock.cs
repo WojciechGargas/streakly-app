@@ -2,5 +2,5 @@
 
 public interface IClock
 {
-    DateTime CurrentTimeUtc { get; }
+    DateTime CurrentTimeUtc();
 }
