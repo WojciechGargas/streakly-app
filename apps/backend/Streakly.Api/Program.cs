@@ -1,10 +1,14 @@
+using Streakly.Application;
 using Streakly.Infrastructure;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddOpenApi();
 
-builder.Services.AddInfrastructure(builder.Configuration);
+builder.Services
+    .AddApplication()
+    .AddInfrastructure(builder.Configuration)
+    .AddControllers();
 
 
 var app = builder.Build();

@@ -35,6 +35,9 @@ internal static class Extensions
                     IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(options.SigningKey))
                 };
             });
+            
+        services.AddAuthorization();
+        
         
         return services;
     }

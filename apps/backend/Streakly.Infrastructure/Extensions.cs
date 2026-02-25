@@ -3,7 +3,9 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Streakly.Application.Abstractions;
 using Streakly.Core.Abstractions;
+using Streakly.Infrastructure.Auth;
 using Streakly.Infrastructure.DAL;
+using Streakly.Infrastructure.Security;
 using Streakly.Infrastructure.Time;
 
 namespace Streakly.Infrastructure;
@@ -17,6 +19,8 @@ public static class Extensions
         var infrastructureAssembly = typeof(AppOptions).Assembly;
 
         services.Configure<AppOptions>(section)
+            .AddSecurtity()
+            .AddAuth(configuration)
             .AddPostgres(configuration)
             .AddSingleton<IClock, Clock>()
             .Scan(s => s.FromAssemblies(infrastructureAssembly)
@@ -36,6 +40,7 @@ public static class Extensions
         app.UseSwaggerUI();
         app.UseAuthentication();
         app.UseAuthorization();
+        app.MapControllers();
 
         return app;
     }

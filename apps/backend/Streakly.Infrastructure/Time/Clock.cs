@@ -4,5 +4,6 @@ namespace Streakly.Infrastructure.Time;
 
 public class Clock :  IClock
 {
-    public DateTime CurrentTimeUtc => DateTime.UtcNow;
+    DateTime IClock.CurrentTimeUtc()
+        => DateTime.UtcNow;
 }

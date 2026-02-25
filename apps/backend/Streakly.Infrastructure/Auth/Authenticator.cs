@@ -1,5 +1,4 @@
-﻿using Microsoft.Extensions.Configuration;
-using System.IdentityModel.Tokens.Jwt;
+﻿using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 using Microsoft.Extensions.Options;
@@ -19,7 +18,7 @@ public class Authenticator : IAuthenticator
     private readonly SigningCredentials _signingCredentials;
     private readonly JwtSecurityTokenHandler _tokenHandler = new();
 
-    public Authenticator(IOptions<AuthOptions> options, IClock clock, string issuer, string audience, SigningCredentials signingCredentials)
+    public Authenticator(IOptions<AuthOptions> options, IClock clock)
     {
         _clock = clock;
         _issuer = options.Value.Issuer;
