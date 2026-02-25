@@ -18,5 +18,7 @@ public sealed record Email
         {
             throw new InvalidEmailException(value);
         }
+        
+        Value = value;
     }
 }

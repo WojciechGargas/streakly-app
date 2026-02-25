@@ -11,11 +11,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="Abstractions\" />
-      <Folder Include="Commands\" />
-      <Folder Include="DTO\" />
       <Folder Include="Exceptions\" />
-      <Folder Include="Quaries\" />
       <Folder Include="Security\" />
     </ItemGroup>
 
