@@ -24,7 +24,7 @@ internal sealed class UserConfiguration : IEntityTypeConfiguration<User>
         builder.Property(x => x.Password)
             .HasConversion(x => x.Value, x => new Password(x))
             .IsRequired()
-            .HasMaxLength(20);
+            .HasMaxLength(100);
         builder.Property(x => x.FullName)
             .HasConversion(x => x.Value, x => new FullName(x))
             .HasMaxLength(50);

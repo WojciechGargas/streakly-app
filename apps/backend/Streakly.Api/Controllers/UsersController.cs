@@ -28,6 +28,12 @@ public class UsersController(
         return user;
     }
 
+    [HttpGet("all")]
+    public async Task<ActionResult<IEnumerable<UserDto>>> GetAllUsers([FromQuery] GetUsers query)
+    {
+        return Ok(await getUsersHandler.HandleAsync(query));
+    }
+
     [HttpPost]
     public async Task<ActionResult> SignUp(SignUp command)
     {
@@ -35,6 +41,15 @@ public class UsersController(
         await signUpHandler.HandleAsync(command);
 
         return Created();
+    }
+
+    [HttpPost("sign-in")]
+    public async Task<ActionResult> SignIn(SignIn command)
+    {
+        await signInHandler.HandleAsync(command);
+        var jwt = tokenStorage.Get();
+        
+        return Ok(jwt);
     }
 }
 
