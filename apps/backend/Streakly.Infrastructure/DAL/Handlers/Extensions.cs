@@ -11,6 +11,6 @@ internal static class Extensions
         {
             Id = entity.UserId,
             Username = entity.Username,
-            FullName = entity.Email
+            FullName = entity.FullName
         };
 }

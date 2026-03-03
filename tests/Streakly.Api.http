@@ -16,5 +16,7 @@ Content-Type: application/json
   "role": "user"
 }
 
+###
+GET {{url}}/users/all
 
 
