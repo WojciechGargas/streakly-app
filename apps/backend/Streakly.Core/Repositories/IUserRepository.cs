@@ -9,4 +9,5 @@ public interface IUserRepository
     Task<User?> GetUserByEmailAsync(Email email);
     Task<User?> GetUserByUsernameAsync(Username username);
     Task AddUserAsync(User user);
+    Task<bool> DeleteUserByIdAsync(UserId  userId);
 }

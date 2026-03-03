@@ -13,6 +13,7 @@ namespace Streakly.Api.Controllers;
 public class UsersController(
     ICommandHandler<SignIn> signInHandler,
     ICommandHandler<SignUp> signUpHandler,
+    ICommandHandler<DeleteUser> deleteUserHandler,
     IQueryHandler<GetUser, UserDto> getUserHandler,
     IQueryHandler<GetUsers, IEnumerable<UserDto>> getUsersHandler,
     ITokenStorage tokenStorage)
@@ -50,6 +51,14 @@ public class UsersController(
         var jwt = tokenStorage.Get();
         
         return Ok(jwt);
+    }
+
+    [HttpDelete("{UserId:guid}")]
+    public async Task<ActionResult> DeleteUser([FromRoute] Guid userId)
+    {
+        await deleteUserHandler.HandleAsync(new DeleteUser(userId));
+        
+        return NoContent();
     }
 }
 

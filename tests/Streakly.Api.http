@@ -1,10 +1,10 @@
 @url = http://localhost:5185
 @randomGuid = de305d54-75b4-431b-adb2-eb6b9e546014
 
-###
+### Get User by Id
 GET {{url}}/users/{{randomGuid}}
 
-###
+### Add sample User
 POST {{url}}/users
 Content-Type: application/json
 
@@ -16,7 +16,10 @@ Content-Type: application/json
   "role": "user"
 }
 
-###
+### Get all Users (list of UserDtos)
 GET {{url}}/users/all
+
+### Delete User (paste in UserId)
+DELETE {{url}}/users/8518e6a1-da7a-49ee-b10d-b35e18b7a1e9
 
 
