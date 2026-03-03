@@ -32,4 +32,9 @@ public class User
     public User()
     {
     }
+
+    public void ChangeUsername(string newUsername)
+    {
+        this.Username = newUsername;
+    }
 }

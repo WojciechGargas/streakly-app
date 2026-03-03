@@ -1,11 +1,13 @@
 @url = http://localhost:5185
 @randomGuid = de305d54-75b4-431b-adb2-eb6b9e546014
+@accessToken = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIwNWY3YmIyZi1jNGVlLTQ5OTMtOTc5NS00NzVkN2U0OWQxYjUiLCJ1bmlxdWVfbmFtZSI6IjA1ZjdiYjJmLWM0ZWUtNDk5My05Nzk1LTQ3NWQ3ZTQ5ZDFiNSIsImh0dHA6Ly9zY2hlbWFzLm1pY3Jvc29mdC5jb20vd3MvMjAwOC8wNi9pZGVudGl0eS9jbGFpbXMvcm9sZSI6InVzZXIiLCJuYmYiOjE3NzI1NDA1ODgsImV4cCI6MTc3MjU0NDE4OCwiaXNzIjoic3RyZWFrbHkiLCJhdWQiOiJzdHJlYWtseS1hcGkifQ.ZathkaLMT_LSBAAV27B3q5QDD6_wReQJfurSC0iq_yw
 
-### Get User by Id
+
+### Users: Get User by Id
 GET {{url}}/users/{{randomGuid}}
 
-### Add sample User
-POST {{url}}/users
+### Users: Add sample User
+POST {{url}}/auth
 Content-Type: application/json
 
 {
@@ -16,10 +18,30 @@ Content-Type: application/json
   "role": "user"
 }
 
-### Get all Users (list of UserDtos)
+### Users: Sign in
+POST {{url}}/auth/sign-in
+Content-Type: application/json
+
+{
+  "email": "test@test.com",
+  "password": "123456789"
+}
+
+### Profile: Get me
+GET {{url}}/profile/me
+Authorization: Bearer {{accessToken}}
+
+### Users: Get all Users (list of UserDtos)
 GET {{url}}/users/all
 
-### Delete User (paste in UserId)
-DELETE {{url}}/users/8518e6a1-da7a-49ee-b10d-b35e18b7a1e9
+### Users: Delete User (paste in UserId)
+DELETE {{url}}/users/05f7bb2f-c4ee-4993-9795-475d7e49d1b5
 
+### Profile: Change Username
+PATCH {{url}}/profile/me/changeUsername
+Authorization: Bearer {{accessToken}}
+Content-Type: application/json
 
+{
+  "newUsername": "updated_username"
+}
