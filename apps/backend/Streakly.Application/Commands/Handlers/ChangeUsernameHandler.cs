@@ -12,7 +12,7 @@ internal sealed class ChangeUsernameHandler(IUserRepository userRepository) : IC
         var user = await userRepository.GetUserByIdAsync(command.UserId) ??
                    throw new UserNotFoundException(command.UserId);
         
-        var username =new Username(command.NewUsername);
+        var username = new Username(command.NewUsername);
 
         var isTaken = await userRepository.GetUserByUsernameAsync(username);
         if (isTaken is not null && isTaken.UserId != user.UserId)

@@ -13,6 +13,7 @@ namespace Streakly.Api.Controllers;
 
 public class ProfileController(
     ICommandHandler<ChangeUsername> changeUsernameHandler,
+    ICommandHandler<ChangeFullname> changeFullnameHandler,
     IQueryHandler<GetUser, UserDto> getUserHandler)
     : ControllerBase
 {
@@ -44,6 +45,20 @@ public class ProfileController(
         }
         
         await changeUsernameHandler.HandleAsync(new ChangeUsername(userId, command.NewUsername));
+        
+        return NoContent();
+    }
+    
+    [Authorize]
+    [HttpPatch("me/changeFullname")]
+    public async Task<ActionResult> ChangeMyFullname([FromBody] ChangeMyFullname command)
+    {
+        if (!Guid.TryParse(User.Identity?.Name, out var userId))
+        {
+            return Unauthorized();
+        }
+        
+        await changeFullnameHandler.HandleAsync(new ChangeFullname(userId, command.NewFullname));
         
         return NoContent();
     }

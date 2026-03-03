@@ -34,7 +34,7 @@ public class User
     }
 
     public void ChangeUsername(string newUsername)
-    {
-        this.Username = newUsername;
-    }
+        => Username = new Username(newUsername);
+    public void ChangeFullName(string newFullname)
+        => FullName = new FullName(newFullname);
 }

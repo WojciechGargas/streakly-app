@@ -1,6 +1,6 @@
 @url = http://localhost:5185
 @randomGuid = de305d54-75b4-431b-adb2-eb6b9e546014
-@accessToken = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIwNWY3YmIyZi1jNGVlLTQ5OTMtOTc5NS00NzVkN2U0OWQxYjUiLCJ1bmlxdWVfbmFtZSI6IjA1ZjdiYjJmLWM0ZWUtNDk5My05Nzk1LTQ3NWQ3ZTQ5ZDFiNSIsImh0dHA6Ly9zY2hlbWFzLm1pY3Jvc29mdC5jb20vd3MvMjAwOC8wNi9pZGVudGl0eS9jbGFpbXMvcm9sZSI6InVzZXIiLCJuYmYiOjE3NzI1NDA1ODgsImV4cCI6MTc3MjU0NDE4OCwiaXNzIjoic3RyZWFrbHkiLCJhdWQiOiJzdHJlYWtseS1hcGkifQ.ZathkaLMT_LSBAAV27B3q5QDD6_wReQJfurSC0iq_yw
+@accessToken = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIwNDVhYWYxNi00YWNiLTQ3ZDMtYTljNS0zNzc0ZTY1NzJlYzgiLCJ1bmlxdWVfbmFtZSI6IjA0NWFhZjE2LTRhY2ItNDdkMy1hOWM1LTM3NzRlNjU3MmVjOCIsImh0dHA6Ly9zY2hlbWFzLm1pY3Jvc29mdC5jb20vd3MvMjAwOC8wNi9pZGVudGl0eS9jbGFpbXMvcm9sZSI6InVzZXIiLCJuYmYiOjE3NzI1NDE1NTYsImV4cCI6MTc3MjU0NTE1NiwiaXNzIjoic3RyZWFrbHkiLCJhdWQiOiJzdHJlYWtseS1hcGkifQ.azrlpinPrUKc3QgeesHFRczpPKKQ5R1mMfq-PMV10xA
 
 
 ### Users: Get User by Id
@@ -44,4 +44,13 @@ Content-Type: application/json
 
 {
   "newUsername": "updated_username"
+}
+
+### Profile: Change Fullname
+PATCH {{url}}/profile/me/changeFullname
+Authorization: Bearer {{accessToken}}
+Content-Type: application/json
+
+{
+  "newFullname": "updated_fullname"
 }
