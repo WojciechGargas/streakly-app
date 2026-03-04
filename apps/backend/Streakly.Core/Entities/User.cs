@@ -39,4 +39,6 @@ public class User
         => FullName = new FullName(newFullname);
     public void ChangePassword(Password newSecuredPassword)
         => Password = newSecuredPassword;
+    public void MarkAsLoggedIn(DateTime loggedInAt)
+        => LastLoggedAtUtc = loggedInAt;
 }

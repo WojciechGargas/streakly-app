@@ -1,6 +1,7 @@
 ﻿using Streakly.Application.Abstractions;
 using Streakly.Application.Exceptions;
 using Streakly.Application.Security;
+using Streakly.Core.Abstractions;
 using Streakly.Core.Repositories;
 
 namespace Streakly.Application.Commands.Handlers;
@@ -9,7 +10,8 @@ internal sealed class SignInHandler(
     IUserRepository userRepository,
     IAuthenticator authenticator,
     IPasswordManager passwordManager,
-    ITokenStorage tokenStorage
+    ITokenStorage tokenStorage,
+    IClock clock
     ) : ICommandHandler<SignIn>
 {
     public async Task HandleAsync(SignIn command)
@@ -21,7 +23,9 @@ internal sealed class SignInHandler(
         {
             throw new InvalidCredentialsException();
         }
-
+        
+        user.MarkAsLoggedIn(clock.CurrentTimeUtc());
+        
         var jwt = authenticator.CreateToken(user.UserId, user.Role.ToString());
         
         tokenStorage.Set(jwt);
