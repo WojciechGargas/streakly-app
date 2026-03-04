@@ -2,6 +2,7 @@ using System.Net;
 using System.Net.Http.Json;
 using Streakly.Application.DTO;
 using Streakly.Tests.Integration.Infrastructure;
+using Streakly.Tests.Integration.Shared;
 
 namespace Streakly.Tests.Integration.Controllers;
 
@@ -173,6 +174,4 @@ public class AuthControllerTests(ApplicationWebFactory factory) : IClassFixture<
         Assert.Equal("invalid_password", error.Code);
         Assert.Equal($"Provided password '{tooShortPassword}' is not a valid password.", error.Reason);
     }
-    
-    private sealed record ErrorResponse(string Code, string Reason);
 }
