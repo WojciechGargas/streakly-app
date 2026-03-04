@@ -37,4 +37,6 @@ public class User
         => Username = new Username(newUsername);
     public void ChangeFullName(string newFullname)
         => FullName = new FullName(newFullname);
+    public void ChangePassword(Password newSecuredPassword)
+        => Password = newSecuredPassword;
 }

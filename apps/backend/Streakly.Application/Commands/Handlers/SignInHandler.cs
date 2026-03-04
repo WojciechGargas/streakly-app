@@ -1,5 +1,4 @@
-﻿using System.Security.Authentication;
-using Streakly.Application.Abstractions;
+﻿using Streakly.Application.Abstractions;
 using Streakly.Application.Exceptions;
 using Streakly.Application.Security;
 using Streakly.Core.Repositories;
@@ -15,11 +14,8 @@ internal sealed class SignInHandler(
 {
     public async Task HandleAsync(SignIn command)
     {
-        var user = await userRepository.GetUserByEmailAsync(command.Email);
-        if (user is null)
-        {
-            throw new InvalidCredentialsException();
-        }
+        var user = await userRepository.GetUserByEmailAsync(command.Email) ??
+                   throw new InvalidCredentialsException();
 
         if (!passwordManager.Validate(command.Password, user.Password))
         {

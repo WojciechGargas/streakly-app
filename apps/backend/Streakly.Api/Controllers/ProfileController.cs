@@ -9,11 +9,13 @@ using Streakly.Application.Security;
 namespace Streakly.Api.Controllers;
 
 [ApiController]
+[Authorize]
 [Route("[controller]")]
 
 public class ProfileController(
     ICommandHandler<ChangeUsername> changeUsernameHandler,
     ICommandHandler<ChangeFullname> changeFullnameHandler,
+    ICommandHandler<ChangePassword> changePasswordHandler,
     IQueryHandler<GetUser, UserDto> getUserHandler)
     : ControllerBase
 {
@@ -25,7 +27,7 @@ public class ProfileController(
             return Unauthorized();
         }
         
-        var userId = Guid.Parse(HttpContext.User.Identity.Name);
+        var userId = GetUserId();
         var user = await getUserHandler.HandleAsync(new GetUser{ UserId = userId });
         if (user is null)
         {
@@ -39,10 +41,7 @@ public class ProfileController(
     [HttpPatch("me/changeUsername")]
     public async Task<ActionResult> ChangeMyUsername([FromBody] ChangeMyUsername command)
     {
-        if (!Guid.TryParse(User.Identity?.Name, out var userId))
-        {
-            return Unauthorized();
-        }
+        var userId = GetUserId();
         
         await changeUsernameHandler.HandleAsync(new ChangeUsername(userId, command.NewUsername));
         
@@ -53,13 +52,31 @@ public class ProfileController(
     [HttpPatch("me/changeFullname")]
     public async Task<ActionResult> ChangeMyFullname([FromBody] ChangeMyFullname command)
     {
-        if (!Guid.TryParse(User.Identity?.Name, out var userId))
-        {
-            return Unauthorized();
-        }
+        var userId = GetUserId();
         
         await changeFullnameHandler.HandleAsync(new ChangeFullname(userId, command.NewFullname));
         
         return NoContent();
+    }
+
+    [Authorize]
+    [HttpPatch("me/changePassword")]
+    public async Task<ActionResult> ChangeMyPassword([FromBody] ChangeMyPassword command)
+    {
+        var userId = GetUserId();
+        
+        await changePasswordHandler.HandleAsync(new ChangePassword(userId, command.OldPassword, command.NewPassword));
+
+        return NoContent();
+    }
+
+    private Guid GetUserId()
+    {
+        if (!Guid.TryParse(User.Identity?.Name, out var userId))
+        {
+            throw new UnauthorizedAccessException();
+        }
+        
+        return userId;
     }
 }
