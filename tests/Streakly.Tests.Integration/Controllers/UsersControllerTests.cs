@@ -11,6 +11,23 @@ public class UsersControllerTests(ApplicationWebFactory factory) : IClassFixture
     private readonly HttpClient _backend = factory.CreateClient();
 
     [Fact]
+    public async Task GetAllUsers_ReturnsUsersList()
+    {
+        //Arrange
+        
+        //Act
+        var response = await _backend.GetAsync($"/users/all" );
+        response.EnsureSuccessStatusCode();
+        var users = await response.Content.ReadFromJsonAsync<IEnumerable<UserDto>>();
+        
+        //Assert
+        Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+        Assert.NotNull(response);
+        Assert.NotNull(users);
+        Assert.Equal(5, users.Count());
+    }
+    
+    [Fact]
     public async Task GetUser_ExisitingUser_ReturnsUser()
     {
         //Arrange
