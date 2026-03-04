@@ -20,7 +20,7 @@ public class ChangeEmailHandler(IUserRepository userRepository) : ICommandHandle
         var email = new Email(command.NewEmail);
 
         var isTaken = await userRepository.GetUserByEmailAsync(email);
-        if (isTaken is not null && isTaken.Email != command.NewEmail)
+        if (isTaken is not null && isTaken.UserId != user.UserId)
         {
             throw new EmailAlreadyInUseException(email);
         }

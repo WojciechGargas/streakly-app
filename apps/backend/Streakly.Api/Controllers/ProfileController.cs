@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Streakly.Api.Exceptions;
 using Streakly.Application.Abstractions;
 using Streakly.Application.Commands;
 using Streakly.Application.DTO;
@@ -73,7 +74,7 @@ public class ProfileController(
 
     [Authorize]
     [HttpPatch("me/changeEmail")]
-    public async Task<ActionResult> ChangMyPassword([FromBody] ChangeMyEmail command)
+    public async Task<ActionResult> ChangeMyPassword([FromBody] ChangeMyEmail command)
     {
         var userId = GetUserId();
         
@@ -86,7 +87,7 @@ public class ProfileController(
     {
         if (!Guid.TryParse(User.Identity?.Name, out var userId))
         {
-            throw new UnauthorizedAccessException();
+            throw new InvalidUserIdClaimException();
         }
         
         return userId;

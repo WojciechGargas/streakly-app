@@ -5,6 +5,7 @@ using Streakly.Application.Abstractions;
 using Streakly.Core.Abstractions;
 using Streakly.Infrastructure.Auth;
 using Streakly.Infrastructure.DAL;
+using Streakly.Infrastructure.Exceptions;
 using Streakly.Infrastructure.Security;
 using Streakly.Infrastructure.Time;
 
@@ -19,6 +20,7 @@ public static class Extensions
         var infrastructureAssembly = typeof(AppOptions).Assembly;
 
         services.Configure<AppOptions>(section)
+            .AddSingleton<ExceptionMiddleware>()
             .AddSecurtity()
             .AddAuth(configuration)
             .AddPostgres(configuration)
@@ -36,6 +38,7 @@ public static class Extensions
 
     public static WebApplication UseInfrastructure(this WebApplication app)
     {
+        app.UseMiddleware<ExceptionMiddleware>();
         app.UseSwagger();
         app.UseSwaggerUI();
         app.UseAuthentication();
