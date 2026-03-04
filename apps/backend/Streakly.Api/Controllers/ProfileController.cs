@@ -16,6 +16,7 @@ public class ProfileController(
     ICommandHandler<ChangeUsername> changeUsernameHandler,
     ICommandHandler<ChangeFullname> changeFullnameHandler,
     ICommandHandler<ChangePassword> changePasswordHandler,
+    ICommandHandler<ChangeEmail>  changeEmailHandler,
     IQueryHandler<GetUser, UserDto> getUserHandler)
     : ControllerBase
 {
@@ -67,6 +68,17 @@ public class ProfileController(
         
         await changePasswordHandler.HandleAsync(new ChangePassword(userId, command.OldPassword, command.NewPassword));
 
+        return NoContent();
+    }
+
+    [Authorize]
+    [HttpPatch("me/changeEmail")]
+    public async Task<ActionResult> ChangMyPassword([FromBody] ChangeMyEmail command)
+    {
+        var userId = GetUserId();
+        
+        await changeEmailHandler.HandleAsync(new ChangeEmail(userId, command.NewEmail));
+        
         return NoContent();
     }
 

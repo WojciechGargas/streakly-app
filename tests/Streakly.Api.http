@@ -64,3 +64,12 @@ Content-Type: application/json
   "oldPassword": "123456789",
   "newPassword": "111111111"
 }
+
+### Change Email
+PATCH {{url}}/profile/me/changeEmail
+Authorization: Bearer {{accessToken}}
+Content-Type: application/json
+
+{
+  "newEmail": "updated_email@test.com"
+}

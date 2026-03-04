@@ -8,7 +8,9 @@ using Streakly.Core.ValueObjects;
 
 namespace Streakly.Application.Commands.Handlers;
 
-public class SignUpHandler(IUserRepository userRepository, IPasswordManager passwordManager, IClock clock)
+public class SignUpHandler(IUserRepository userRepository,
+    IPasswordManager passwordManager,
+    IClock clock)
     : ICommandHandler<SignUp>
 {
 
