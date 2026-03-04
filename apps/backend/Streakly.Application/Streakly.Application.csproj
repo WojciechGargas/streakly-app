@@ -15,4 +15,9 @@
       <PackageReference Include="Scrutor" Version="6.1.0" />
     </ItemGroup>
 
+    <ItemGroup>
+        <InternalsVisibleTo Include="Streakly.Tests.Unit" />
+        <InternalsVisibleTo Include="Streakly.Tests.Integration" />
+    </ItemGroup>
+
 </Project>
