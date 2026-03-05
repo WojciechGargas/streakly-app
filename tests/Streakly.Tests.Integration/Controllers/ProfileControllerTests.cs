@@ -1,12 +1,5 @@
-using System.IdentityModel.Tokens.Jwt;
 using System.Net;
-using System.Net.Http.Headers;
 using System.Net.Http.Json;
-using System.Security.Claims;
-using System.Text;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.IdentityModel.Tokens;
 using Streakly.Application.DTO;
 using Streakly.Tests.Integration.Infrastructure;
 using Streakly.Tests.Integration.Shared;
@@ -19,7 +12,7 @@ public class ProfileControllerTests(ApplicationWebFactory factory) : IClassFixtu
 
     public Task InitializeAsync()
     {
-        _backend.DefaultRequestHeaders.Authorization = null;
+        AuthTestHelper.ClearAuthorization(_backend);
         return factory.ResetStateAsync();
     }
 
@@ -40,7 +33,7 @@ public class ProfileControllerTests(ApplicationWebFactory factory) : IClassFixtu
     {
         //Arrange
         var expectedUserId = Guid.Parse("22222222-2222-2222-2222-222222222222");
-        AuthenticateAs(expectedUserId);
+        AuthTestHelper.AuthenticateByJwt(_backend, factory.Services, expectedUserId);
 
         //Act
         var response = await _backend.GetAsync("/profile/me");
@@ -74,7 +67,7 @@ public class ProfileControllerTests(ApplicationWebFactory factory) : IClassFixtu
     {
         //Arrange
         var userId = Guid.Parse("22222222-2222-2222-2222-222222222222");
-        AuthenticateAs(userId);
+        AuthTestHelper.AuthenticateByJwt(_backend, factory.Services, userId);
 
         var request = new
         {
@@ -117,7 +110,7 @@ public class ProfileControllerTests(ApplicationWebFactory factory) : IClassFixtu
     {
         //Arrange
         var userId = Guid.Parse("22222222-2222-2222-2222-222222222222");
-        AuthenticateAs(userId);
+        AuthTestHelper.AuthenticateByJwt(_backend, factory.Services, userId);
 
         var request = new
         {
@@ -161,7 +154,7 @@ public class ProfileControllerTests(ApplicationWebFactory factory) : IClassFixtu
         //Arrange
         var newPassword = "11111111";
         var userId = Guid.Parse("22222222-2222-2222-2222-222222222222");
-        AuthenticateAs(userId);
+        AuthTestHelper.AuthenticateByJwt(_backend, factory.Services, userId);
         
         var newPasswordRequest = new
         {
@@ -202,7 +195,7 @@ public class ProfileControllerTests(ApplicationWebFactory factory) : IClassFixtu
     {
         //Arrange
         var userId = Guid.Parse("22222222-2222-2222-2222-222222222222");
-        AuthenticateAs(userId);
+        AuthTestHelper.AuthenticateByJwt(_backend, factory.Services, userId);
         
         var newPasswordRequest = new
         {
@@ -243,7 +236,7 @@ public class ProfileControllerTests(ApplicationWebFactory factory) : IClassFixtu
         //Arrange
         var newEmail = "updatedEmail@updated.test";
         var userId = Guid.Parse("22222222-2222-2222-2222-222222222222");
-        AuthenticateAs(userId);
+        AuthTestHelper.AuthenticateByJwt(_backend, factory.Services, userId);
         
         var newEmailRequest = new
         {
@@ -279,7 +272,7 @@ public class ProfileControllerTests(ApplicationWebFactory factory) : IClassFixtu
         //Arrange
         var newEmail = "xxx";
         var userId = Guid.Parse("22222222-2222-2222-2222-222222222222");
-        AuthenticateAs(userId);
+        AuthTestHelper.AuthenticateByJwt(_backend, factory.Services, userId);
         
         var newEmailRequest = new
         {
@@ -303,7 +296,7 @@ public class ProfileControllerTests(ApplicationWebFactory factory) : IClassFixtu
         //Arrange
         var newEmail = "admin@streakly.test";
         var userId = Guid.Parse("22222222-2222-2222-2222-222222222222");
-        AuthenticateAs(userId);
+        AuthTestHelper.AuthenticateByJwt(_backend, factory.Services, userId);
         
         var newEmailRequest = new
         {
@@ -327,7 +320,7 @@ public class ProfileControllerTests(ApplicationWebFactory factory) : IClassFixtu
         //Arrange
         var newEmail = "anna@streakly.test";
         var userId = Guid.Parse("22222222-2222-2222-2222-222222222222");
-        AuthenticateAs(userId);
+        AuthTestHelper.AuthenticateByJwt(_backend, factory.Services, userId);
         
         var newEmailRequest = new
         {
@@ -344,47 +337,4 @@ public class ProfileControllerTests(ApplicationWebFactory factory) : IClassFixtu
         Assert.Equal("new_email_must_be_different", error.Code);
         Assert.Equal("New email must be different from the current email", error.Reason);
     }
-
-    private void AuthenticateAs(Guid userId, string role = "User")
-    {
-        var authSettings = GetAuthSettings();
-
-        var claims = new[]
-        {
-            new Claim(ClaimTypes.Name, userId.ToString()),
-            new Claim(ClaimTypes.Role, role)
-        };
-
-        var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(authSettings.SigningKey));
-        var credentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
-
-        var token = new JwtSecurityToken(
-            issuer: authSettings.Issuer,
-            audience: authSettings.Audience,
-            claims: claims,
-            expires: DateTime.UtcNow.AddHours(1),
-            signingCredentials: credentials);
-
-        var accessToken = new JwtSecurityTokenHandler().WriteToken(token);
-
-        _backend.DefaultRequestHeaders.Authorization =
-            new AuthenticationHeaderValue("Bearer", accessToken);
-    }
-
-    private AuthSettings GetAuthSettings()
-    {
-        using var scope = factory.Services.CreateScope();
-        var configuration = scope.ServiceProvider.GetRequiredService<IConfiguration>();
-
-        var issuer = configuration["auth:issuer"]
-                     ?? throw new InvalidOperationException("Missing configuration key: auth:issuer");
-        var audience = configuration["auth:audience"]
-                       ?? throw new InvalidOperationException("Missing configuration key: auth:audience");
-        var signingKey = configuration["auth:signingKey"]
-                         ?? throw new InvalidOperationException("Missing configuration key: auth:signingKey");
-
-        return new AuthSettings(issuer, audience, signingKey);
-    }
-
-    private sealed record AuthSettings(string Issuer, string Audience, string SigningKey);
 }

@@ -18,6 +18,7 @@ public class ProfileController(
     ICommandHandler<ChangeFullname> changeFullnameHandler,
     ICommandHandler<ChangePassword> changePasswordHandler,
     ICommandHandler<ChangeEmail>  changeEmailHandler,
+    ICommandHandler<DeleteUser> deleteUserHandler,
     IQueryHandler<GetUser, UserDto> getUserHandler)
     : ControllerBase
 {
@@ -75,6 +76,16 @@ public class ProfileController(
         var userId = GetUserId();
         
         await changeEmailHandler.HandleAsync(new ChangeEmail(userId, command.NewEmail));
+        
+        return NoContent();
+    }
+
+    [HttpDelete("me")]
+    public async Task<ActionResult> DeleteMyAccount()
+    {
+        var userId = GetUserId();
+        
+        await deleteUserHandler.HandleAsync(new DeleteUser(userId));
         
         return NoContent();
     }

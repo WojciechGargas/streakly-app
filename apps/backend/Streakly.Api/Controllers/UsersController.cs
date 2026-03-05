@@ -34,6 +34,7 @@ public class UsersController(
     }
     
     [HttpDelete("{UserId:guid}")]
+    [Authorize(Policy = "is-admin")]
     public async Task<ActionResult> DeleteUser([FromRoute] Guid userId)
     {
         await deleteUserHandler.HandleAsync(new DeleteUser(userId));
