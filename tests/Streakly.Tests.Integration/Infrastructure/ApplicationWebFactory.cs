@@ -60,6 +60,8 @@ public sealed class ApplicationWebFactory : WebApplicationFactory<Program>, IAsy
         await ResetDatabaseAsync();
     }
 
+    public Task ResetStateAsync() => ResetDatabaseAsync();
+
     public new async Task DisposeAsync()
     {
         await _dbContainer.DisposeAsync();

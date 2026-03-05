@@ -6,9 +6,13 @@ using Streakly.Tests.Integration.Shared;
 
 namespace Streakly.Tests.Integration.Controllers;
 
-public class AuthControllerTests(ApplicationWebFactory factory) : IClassFixture<ApplicationWebFactory>
+public class AuthControllerTests(ApplicationWebFactory factory) : IClassFixture<ApplicationWebFactory>, IAsyncLifetime
 {
     private readonly HttpClient _backend = factory.CreateClient();
+
+    public Task InitializeAsync() => factory.ResetStateAsync();
+
+    public Task DisposeAsync() => Task.CompletedTask;
 
     [Fact]
     public async Task SignIn_WithCorrectCredentials_ReturnsJwtToken()
