@@ -39,7 +39,6 @@ public class ProfileController(
         return  user;
     }
     
-    [Authorize]
     [HttpPatch("me/changeUsername")]
     public async Task<ActionResult> ChangeMyUsername([FromBody] ChangeMyUsername command)
     {
@@ -49,8 +48,7 @@ public class ProfileController(
         
         return NoContent();
     }
-    
-    [Authorize]
+
     [HttpPatch("me/changeFullname")]
     public async Task<ActionResult> ChangeMyFullname([FromBody] ChangeMyFullname command)
     {
@@ -61,7 +59,6 @@ public class ProfileController(
         return NoContent();
     }
 
-    [Authorize]
     [HttpPatch("me/changePassword")]
     public async Task<ActionResult> ChangeMyPassword([FromBody] ChangeMyPassword command)
     {
@@ -72,7 +69,6 @@ public class ProfileController(
         return NoContent();
     }
 
-    [Authorize]
     [HttpPatch("me/changeEmail")]
     public async Task<ActionResult> ChangeMyPassword([FromBody] ChangeMyEmail command)
     {
