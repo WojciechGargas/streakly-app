@@ -1,4 +1,5 @@
-﻿using Streakly.Core.ValueObjects;
+﻿using System.Runtime.CompilerServices;
+using Streakly.Core.ValueObjects;
 
 namespace Streakly.Core.Entities;
 
@@ -64,5 +65,11 @@ public class Activity
             endDate,
             type,
             false);
+    }
+
+    public void MarkActivityAsCompleted()
+    {
+        Completed = true;
+        UpdatedAt = DateTime.UtcNow;
     }
 }

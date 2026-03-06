@@ -53,6 +53,14 @@ public class User
         
         Activities.Remove(activityToDelete);
     }
+
+    public void MarkActivityAsCompleted(Guid activityToCompleteId)
+    {
+        var activityToMarkAsCompleted = Activities.SingleOrDefault(a => a.Id == activityToCompleteId) ??
+                                        throw new ActivityNotFoundException(activityToCompleteId);
+        
+        activityToMarkAsCompleted.MarkActivityAsCompleted();
+    }
 }
 
 

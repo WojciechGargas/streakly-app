@@ -73,3 +73,32 @@ Content-Type: application/json
 {
   "newEmail": "updated_email@test.com"
 }
+
+###
+@adminToken = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJjMWVmYzI2Mi1hN2FmLTRmNWQtOGViMS02ZmNhMTc3OTVkNzMiLCJ1bmlxdWVfbmFtZSI6ImMxZWZjMjYyLWE3YWYtNGY1ZC04ZWIxLTZmY2ExNzc5NWQ3MyIsImh0dHA6Ly9zY2hlbWFzLm1pY3Jvc29mdC5jb20vd3MvMjAwOC8wNi9pZGVudGl0eS9jbGFpbXMvcm9sZSI6IkFkbWluIiwibmJmIjoxNzcyODAxNDczLCJleHAiOjE3NzI4MDUwNzMsImlzcyI6InN0cmVha2x5IiwiYXVkIjoic3RyZWFrbHktYXBpIn0.Z0QrBfK8Ey2nIkEs54_gJrOz0hYmenqouXcS1MlhWm0
+@userToDeleteId = 596158f5-ca7d-4476-8c26-f0bdf55f5db1
+
+### Users: Add Admin
+POST {{url}}/auth
+Content-Type: application/json
+
+{
+  "email": "admin@test.com",
+  "username": "admin",
+  "password": "admin123!",
+  "fullName": "John Admin",
+  "role": "Admin"
+}
+
+### Users: Sign in as admin
+POST {{url}}/auth/sign-in
+Content-Type: application/json
+
+{
+  "email": "admin@test.com",
+  "password": "admin123!"
+}
+
+### Users: Delete User (paste in UserId)
+DELETE {{url}}/users/{{userToDeleteId}}
+Authorization: Bearer {{adminToken}}

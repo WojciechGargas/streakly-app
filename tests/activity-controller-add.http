@@ -6,13 +6,13 @@
 @role = user
 
 # Fill after sign-in:
-@accessToken = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI0OTY2NWQxNi1lZDhlLTRmZjQtYjM4NC04NWMxOGQ1NDU3MDUiLCJ1bmlxdWVfbmFtZSI6IjQ5NjY1ZDE2LWVkOGUtNGZmNC1iMzg0LTg1YzE4ZDU0NTcwNSIsImh0dHA6Ly9zY2hlbWFzLm1pY3Jvc29mdC5jb20vd3MvMjAwOC8wNi9pZGVudGl0eS9jbGFpbXMvcm9sZSI6InVzZXIiLCJuYmYiOjE3NzI3OTg4MzEsImV4cCI6MTc3MjgwMjQzMSwiaXNzIjoic3RyZWFrbHkiLCJhdWQiOiJzdHJlYWtseS1hcGkifQ.Bi5ih7RABcXmtuAsTPD39FC3QJcYm2SmV_L6ygu1QPE
+@accessToken = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI0Y2UxMGVmYi0xMDM3LTQ1NGUtOWI0MC0zYmQ2Y2NhODljODciLCJ1bmlxdWVfbmFtZSI6IjRjZTEwZWZiLTEwMzctNDU0ZS05YjQwLTNiZDZjY2E4OWM4NyIsImh0dHA6Ly9zY2hlbWFzLm1pY3Jvc29mdC5jb20vd3MvMjAwOC8wNi9pZGVudGl0eS9jbGFpbXMvcm9sZSI6InVzZXIiLCJuYmYiOjE3NzI4MDE2NDgsImV4cCI6MTc3MjgwNTI0OCwiaXNzIjoic3RyZWFrbHkiLCJhdWQiOiJzdHJlYWtseS1hcGkifQ.L5S8CT_yGc8y08AvBlBVtPGYW5qF_BWLfeMG7X0wtdg
 
 # Fill after GET /profile/me:
-@userId = 49665d16-ed8e-4ff4-b384-85c18d545705
+@userId = 4ce10efb-1037-454e-9b40-3bd6cca89c87
 
 # ActivityID
-@activityId = f266490d-4e83-4e6f-87c3-3a2189812310
+@activityId = 0ebd9b2b-653e-4f3c-ba3e-9f812f5e0c2c
 
 # 1) Register a test user (201 Created)
 POST {{host}}/auth
@@ -97,7 +97,18 @@ Content-Type: application/json
 ###
 
 # 6) Delete Activity
-DELETE {{host}}/activity/deleteActivity/{{activityId}}
+DELETE {{host}}/activity/deleteActivity
+Authorization: Bearer {{accessToken}}
+Content-Type: application/json
+
+{
+  "id": "{{activityId}}"
+}
+
+###
+
+# 7) Set Activity as completed
+PATCH {{host}}/activity/markAsCompleted
 Authorization: Bearer {{accessToken}}
 Content-Type: application/json
 

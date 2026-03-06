@@ -13,6 +13,7 @@ internal sealed class GetUserHandler(StreaklyDbContext dbContext) : IQueryHandle
     {
         var userId = new UserId(query.UserId);
         var user = await dbContext.Users
+            .Include(a => a.Activities)
             .AsNoTracking()
             .SingleOrDefaultAsync(x => x.UserId == userId);
 

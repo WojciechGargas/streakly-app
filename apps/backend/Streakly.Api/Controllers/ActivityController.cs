@@ -12,10 +12,11 @@ namespace Streakly.Api.Controllers;
 
 public class ActivityController(
     ICommandHandler<AddActivity> addActivityCommandHandler,
-    ICommandHandler<DeleteActivity> deleteActivityCommandHandler)
+    ICommandHandler<DeleteActivity> deleteActivityCommandHandler,
+    ICommandHandler<MarkActivityAsCompleted> markActivityAsCompletedCommandHandler)
     : ControllerBase
 {
-    [HttpPost("addActivity/")]
+    [HttpPost("addActivity")]
     public async Task<ActionResult> AddActivity(AddActivityRequest request)
     {
         var userId = GetUserId();
@@ -32,12 +33,22 @@ public class ActivityController(
         return NoContent();
     }
 
-    [HttpDelete("deleteActivity/{id}")]
+    [HttpDelete("deleteActivity")]
     public async Task<ActionResult> DeleteActivity(DeleteActivityRequest request)
     {
         var userId = GetUserId();
         
         await deleteActivityCommandHandler.HandleAsync(new DeleteActivity(userId, request.Id));
+        
+        return NoContent();
+    }
+
+    [HttpPatch("markAsCompleted")]
+    public async Task<ActionResult> MarkAsCompleted(MarkActivityAsCompletedRequest request)
+    {
+        var userId = GetUserId();
+        
+        await markActivityAsCompletedCommandHandler.HandleAsync(new MarkActivityAsCompleted(userId, request.Id));
         
         return NoContent();
     }
