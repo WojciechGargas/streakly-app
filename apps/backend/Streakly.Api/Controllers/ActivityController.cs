@@ -13,7 +13,8 @@ namespace Streakly.Api.Controllers;
 public class ActivityController(
     ICommandHandler<AddActivity> addActivityCommandHandler,
     ICommandHandler<DeleteActivity> deleteActivityCommandHandler,
-    ICommandHandler<MarkActivityAsCompleted> markActivityAsCompletedCommandHandler)
+    ICommandHandler<MarkActivityAsCompleted> markActivityAsCompletedCommandHandler,
+    ICommandHandler<MarkActivityAsIncomplete> markActivityAsIncompleteCommandHandler)
     : ControllerBase
 {
     [HttpPost("addActivity")]
@@ -49,6 +50,16 @@ public class ActivityController(
         var userId = GetUserId();
         
         await markActivityAsCompletedCommandHandler.HandleAsync(new MarkActivityAsCompleted(userId, request.Id));
+        
+        return NoContent();
+    }
+
+    [HttpPatch("markAsIncompleted")]
+    public async Task<ActionResult> MarkAsIncomplete(MarkActivityAsIncompleteRequest request)
+    {
+        var userId = GetUserId();
+        
+        await markActivityAsIncompleteCommandHandler.HandleAsync(new MarkActivityAsIncomplete(userId, request.Id));
         
         return NoContent();
     }

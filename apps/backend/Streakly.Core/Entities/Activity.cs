@@ -72,4 +72,10 @@ public class Activity
         Completed = true;
         UpdatedAt = DateTime.UtcNow;
     }
+    
+    public void MarkActivityAsIncompleted()
+    {
+        Completed = false;
+        UpdatedAt = DateTime.UtcNow;
+    }
 }

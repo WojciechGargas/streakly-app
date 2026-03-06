@@ -12,7 +12,7 @@
 @userId = 4ce10efb-1037-454e-9b40-3bd6cca89c87
 
 # ActivityID
-@activityId = 0ebd9b2b-653e-4f3c-ba3e-9f812f5e0c2c
+@activityId = 82456f58-b5be-43b1-9a1b-cd84b182052a
 
 # 1) Register a test user (201 Created)
 POST {{host}}/auth
@@ -109,6 +109,17 @@ Content-Type: application/json
 
 # 7) Set Activity as completed
 PATCH {{host}}/activity/markAsCompleted
+Authorization: Bearer {{accessToken}}
+Content-Type: application/json
+
+{
+  "id": "{{activityId}}"
+}
+
+###
+
+# 7) Set Activity as incompleted
+PATCH {{host}}/activity/markAsIncompleted
 Authorization: Bearer {{accessToken}}
 Content-Type: application/json
 

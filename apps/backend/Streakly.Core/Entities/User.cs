@@ -61,6 +61,14 @@ public class User
         
         activityToMarkAsCompleted.MarkActivityAsCompleted();
     }
+    
+    public void MarkActivityAsIncompleted(Guid activityToCompleteId)
+    {
+        var activityToMarkAsCompleted = Activities.SingleOrDefault(a => a.Id == activityToCompleteId) ??
+                                        throw new ActivityNotFoundException(activityToCompleteId);
+        
+        activityToMarkAsCompleted.MarkActivityAsIncompleted();
+    }
 }
 
 
