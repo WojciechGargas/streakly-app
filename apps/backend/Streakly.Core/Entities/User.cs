@@ -1,4 +1,5 @@
-﻿using Streakly.Core.ValueObjects;
+using Streakly.Core.Exceptions;
+using Streakly.Core.ValueObjects;
 
 namespace Streakly.Core.Entities;
 
@@ -45,4 +46,13 @@ public class User
         => LastLoggedAtUtc = loggedInAt;
     public void AddActivity(Activity newActivity)
         => Activities.Add(newActivity);
+    public void DeleteActivity(Guid activityToDeleteId)
+    {
+        var activityToDelete = Activities.SingleOrDefault(a => a.Id == activityToDeleteId) ??
+                               throw new ActivityNotFoundException(activityToDeleteId);
+        
+        Activities.Remove(activityToDelete);
+    }
 }
+
+

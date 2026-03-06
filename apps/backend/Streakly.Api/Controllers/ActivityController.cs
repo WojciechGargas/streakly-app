@@ -11,7 +11,8 @@ namespace Streakly.Api.Controllers;
 [Route("[controller]")]
 
 public class ActivityController(
-    ICommandHandler<AddActivity> addActivityCommandHandler)
+    ICommandHandler<AddActivity> addActivityCommandHandler,
+    ICommandHandler<DeleteActivity> deleteActivityCommandHandler)
     : ControllerBase
 {
     [HttpPost("addActivity/")]
@@ -27,6 +28,16 @@ public class ActivityController(
             request.FrequencyType);
         
         await addActivityCommandHandler.HandleAsync(command);
+        
+        return NoContent();
+    }
+
+    [HttpDelete("deleteActivity/{id}")]
+    public async Task<ActionResult> DeleteActivity(DeleteActivityRequest request)
+    {
+        var userId = GetUserId();
+        
+        await deleteActivityCommandHandler.HandleAsync(new DeleteActivity(userId, request.Id));
         
         return NoContent();
     }

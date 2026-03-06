@@ -11,6 +11,11 @@ public class UserRepository(StreaklyDbContext dbContext) : IUserRepository
 
     public Task<User?> GetUserByIdAsync(UserId id)
         => _users.SingleOrDefaultAsync(x => x.UserId == id);
+    
+    public Task<User?> GetUserByIdWithActivitiesAsync(UserId id)
+        => _users
+            .Include(x => x.Activities)
+            .SingleOrDefaultAsync(x => x.UserId == id);
 
     public Task<User?> GetUserByEmailAsync(Email email)
         => _users.SingleOrDefaultAsync(x => x.Email == email);
