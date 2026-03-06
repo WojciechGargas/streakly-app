@@ -11,6 +11,8 @@ internal static class Extensions
         {
             Id = entity.UserId,
             Username = entity.Username,
-            FullName = entity.FullName
+            FullName = entity.FullName,
+            LastLoggedIn = entity.LastLoggedAtUtc,
+            Activities = entity.Activities
         };
 }

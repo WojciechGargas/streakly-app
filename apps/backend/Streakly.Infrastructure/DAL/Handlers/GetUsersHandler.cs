@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Streakly.Application.Abstractions;
 using Streakly.Application.DTO;
-using Streakly.Application.Quaries;
+using Streakly.Application.Queries;
 
 namespace Streakly.Infrastructure.DAL.Handlers;
 

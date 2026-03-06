@@ -4,8 +4,8 @@ using Streakly.Api.Exceptions;
 using Streakly.Application.Abstractions;
 using Streakly.Application.Commands;
 using Streakly.Application.DTO;
-using Streakly.Application.Quaries;
-using Streakly.Application.Security;
+using Streakly.Application.Queries;
+
 
 namespace Streakly.Api.Controllers;
 

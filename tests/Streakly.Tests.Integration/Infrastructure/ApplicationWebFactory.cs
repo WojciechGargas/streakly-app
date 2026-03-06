@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.TestHost;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
+using Streakly.Api;
 using Streakly.Application.Security;
 using Streakly.Core.Abstractions;
 using Streakly.Core.Entities;

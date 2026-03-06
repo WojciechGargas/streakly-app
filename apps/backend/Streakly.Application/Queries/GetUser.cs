@@ -1,7 +1,7 @@
 ﻿using Streakly.Application.Abstractions;
 using Streakly.Application.DTO;
 
-namespace Streakly.Application.Quaries;
+namespace Streakly.Application.Queries;
 
 public class GetUser : IQuery<UserDto>
 {

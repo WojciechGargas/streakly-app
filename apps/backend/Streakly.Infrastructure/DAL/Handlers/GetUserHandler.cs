@@ -2,7 +2,7 @@
 using Streakly.Application.Abstractions;
 using Streakly.Application.DTO;
 using Streakly.Application.Exceptions;
-using Streakly.Application.Quaries;
+using Streakly.Application.Queries;
 using Streakly.Core.ValueObjects;
 
 namespace Streakly.Infrastructure.DAL.Handlers;
