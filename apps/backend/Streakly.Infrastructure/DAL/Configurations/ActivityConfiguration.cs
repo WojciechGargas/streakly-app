@@ -9,6 +9,9 @@ internal sealed class ActivityConfiguration : IEntityTypeConfiguration<Activity>
 {
     public void Configure(EntityTypeBuilder<Activity> builder)
     {
+        builder.HasKey(x => x.Id);
+        builder.Property(x => x.Id)
+            .ValueGeneratedNever();
         builder.Property(x => x.UserId)
             .HasConversion(x => x.Value, x => new UserId(x));
         builder.Property(x => x.Name)

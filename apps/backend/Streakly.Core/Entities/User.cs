@@ -13,7 +13,7 @@ public class User
     public UserRole Role { get; private set; }
     public DateTime CreatedAt { get; private set; }
     public DateTime? LastLoggedAtUtc { get; private set; }
-    public List<Activity> Activities { get; private set; }
+    public List<Activity> Activities { get; private set; } = new();
     
     
     public User(UserId userId, Email email, Username username, Password password,
@@ -43,4 +43,6 @@ public class User
         => Email = newEmail;
     public void MarkAsLoggedIn(DateTime loggedInAt)
         => LastLoggedAtUtc = loggedInAt;
+    public void AddActivity(Activity newActivity)
+        => Activities.Add(newActivity);
 }

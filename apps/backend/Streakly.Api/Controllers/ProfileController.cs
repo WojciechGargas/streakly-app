@@ -41,41 +41,41 @@ public class ProfileController(
     }
     
     [HttpPatch("me/changeUsername")]
-    public async Task<ActionResult> ChangeMyUsername([FromBody] ChangeMyUsername command)
+    public async Task<ActionResult> ChangeUsername([FromBody] ChangeUsernameRequest request)
     {
         var userId = GetUserId();
         
-        await changeUsernameHandler.HandleAsync(new ChangeUsername(userId, command.NewUsername));
+        await changeUsernameHandler.HandleAsync(new ChangeUsername(userId, request.NewUsername));
         
         return NoContent();
     }
 
     [HttpPatch("me/changeFullname")]
-    public async Task<ActionResult> ChangeMyFullname([FromBody] ChangeMyFullname command)
+    public async Task<ActionResult> ChangeFullname([FromBody] ChangeFullnameRequest request)
     {
         var userId = GetUserId();
         
-        await changeFullnameHandler.HandleAsync(new ChangeFullname(userId, command.NewFullname));
+        await changeFullnameHandler.HandleAsync(new ChangeFullname(userId, request.NewFullname));
         
         return NoContent();
     }
 
     [HttpPatch("me/changePassword")]
-    public async Task<ActionResult> ChangeMyPassword([FromBody] ChangeMyPassword command)
+    public async Task<ActionResult> ChangePassword([FromBody] ChangePasswordRequest request)
     {
         var userId = GetUserId();
         
-        await changePasswordHandler.HandleAsync(new ChangePassword(userId, command.OldPassword, command.NewPassword));
+        await changePasswordHandler.HandleAsync(new ChangePassword(userId, request.OldPassword, request.NewPassword));
 
         return NoContent();
     }
 
     [HttpPatch("me/changeEmail")]
-    public async Task<ActionResult> ChangeMyPassword([FromBody] ChangeMyEmail command)
+    public async Task<ActionResult> ChangeEmail([FromBody] ChangeEmailRequest request)
     {
         var userId = GetUserId();
         
-        await changeEmailHandler.HandleAsync(new ChangeEmail(userId, command.NewEmail));
+        await changeEmailHandler.HandleAsync(new ChangeEmail(userId, request.NewEmail));
         
         return NoContent();
     }

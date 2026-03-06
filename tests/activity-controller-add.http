@@ -1,0 +1,92 @@
+@host = http://localhost:5185
+@email = activity_test_1@test.com
+@username = user_1
+@password = 123456789
+@fullName = Activity Tester
+@role = user
+
+# Fill after sign-in:
+@accessToken = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
+
+# Fill after GET /profile/me:
+@userId = 49665d16-ed8e-4ff4-b384-85c18d545705
+
+# 1) Register a test user (201 Created)
+POST {{host}}/auth
+Content-Type: application/json
+
+{
+  "email": "{{email}}",
+  "username": "{{username}}",
+  "password": "{{password}}",
+  "fullName": "{{fullName}}",
+  "role": "{{role}}"
+}
+
+###
+
+# 2) Sign in (200 OK) -> copy the accessToken to accessToken variable
+POST {{host}}/auth/sign-in
+Content-Type: application/json
+
+{
+  "email": "{{email}}",
+  "password": "{{password}}"
+}
+
+###
+
+# 3) Get user profile (200 OK) -> copy the id to userId variable
+GET {{host}}/profile/me
+Authorization: Bearer {{accessToken}}
+
+###
+
+# 4) Add activity without token (401 Unauthorized expected)
+POST {{host}}/activity/addActivity/{{userId}}
+Content-Type: application/json
+
+{
+  "userId": {
+    "value": "{{userId}}"
+  },
+  "id": "11111111-1111-1111-1111-111111111111",
+  "name": {
+    "value": "Read 20 pages"
+  },
+  "description": {
+    "value": "Daily reading routine"
+  },
+  "createdAt": "2026-03-06T10:00:00Z",
+  "updatedAt": null,
+  "startDate": "2026-03-06T10:00:00Z",
+  "endDate": "2026-03-20T10:00:00Z",
+  "frequencyType": 1,
+  "completed": false
+}
+
+###
+
+# 5) Add activity with token (success expected after handler implementation)
+POST {{host}}/activity/addActivity/
+Authorization: Bearer {{accessToken}}
+Content-Type: application/json
+
+{
+  "userId": {
+    "value": "{{userId}}"
+  },
+  "id": "22222222-2222-2222-2222-222222222222",
+  "name": {
+    "value": "Run 5 km"
+  },
+  "description": {
+    "value": "Cardio training"
+  },
+  "createdAt": "2026-03-06T10:00:00Z",
+  "updatedAt": null,
+  "startDate": "2026-03-06T10:00:00Z",
+  "endDate": "2026-03-20T10:00:00Z",
+  "frequencyType": 1,
+  "completed": false
+}
