@@ -114,10 +114,10 @@ public class UsersControllerTests(ApplicationWebFactory factory) : IClassFixture
 
         //Act
         var response = await _backend.DeleteAsync($"/users/{userId}");
+        var error = await response.Content.ReadFromJsonAsync<ErrorResponse>();
 
         //Assert
         Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
-        var error = await response.Content.ReadFromJsonAsync<ErrorResponse>();
         Assert.NotNull(error);
         Assert.Equal("user_not_found", error.Code);
         Assert.Equal($"User with ID : '{userId}' was not found.", error.Reason);

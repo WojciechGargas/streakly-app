@@ -15,19 +15,6 @@ internal static class AuthTestHelper
     public static void ClearAuthorization(HttpClient client)
         => client.DefaultRequestHeaders.Authorization = null;
 
-    public static async Task AuthenticateBySignInAsync(HttpClient client, string email, string password)
-    {
-        var signInResponse = await client.PostAsJsonAsync("/auth/sign-in", new { email, password });
-        signInResponse.EnsureSuccessStatusCode();
-
-        var jwt = await signInResponse.Content.ReadFromJsonAsync<JwtDto>();
-        Assert.NotNull(jwt);
-        Assert.False(string.IsNullOrWhiteSpace(jwt!.AccessToken));
-
-        client.DefaultRequestHeaders.Authorization =
-            new AuthenticationHeaderValue("Bearer", jwt.AccessToken);
-    }
-
     public static void AuthenticateByJwt(HttpClient client, IServiceProvider services, Guid userId, string role = "User")
     {
         var authSettings = GetAuthSettings(services);
