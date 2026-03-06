@@ -118,11 +118,23 @@ Content-Type: application/json
 
 ###
 
-# 7) Set Activity as incompleted
+# 8) Set Activity as incompleted
 PATCH {{host}}/activity/markAsIncompleted
 Authorization: Bearer {{accessToken}}
 Content-Type: application/json
 
 {
   "id": "{{activityId}}"
+}
+
+###
+
+# 9) Change Activity name
+PATCH {{host}}/activity/changeActivityName
+Authorization: Bearer {{accessToken}}
+Content-Type: application/json
+
+{
+  "id": "{{activityId}}",
+  "newActivityName": "updated_activity_name"
 }

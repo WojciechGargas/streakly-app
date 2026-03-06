@@ -78,4 +78,10 @@ public class Activity
         Completed = false;
         UpdatedAt = DateTime.UtcNow;
     }
+
+    public void ChangeName(string newName)
+    {
+        Name = newName;
+        UpdatedAt = DateTime.UtcNow;
+    }
 }

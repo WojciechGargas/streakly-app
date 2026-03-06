@@ -69,6 +69,14 @@ public class User
         
         activityToMarkAsCompleted.MarkActivityAsIncompleted();
     }
+
+    public void ChangeActivityName(Guid activityToChangeNameId, string newName)
+    {
+        var activityToChangeName = Activities.SingleOrDefault(a => a.Id == activityToChangeNameId) ??
+                                   throw new ActivityNotFoundException(activityToChangeNameId);
+        
+        activityToChangeName.ChangeName(newName);
+    }
 }
 
 
