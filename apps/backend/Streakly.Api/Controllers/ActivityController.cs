@@ -15,7 +15,8 @@ public class ActivityController(
     ICommandHandler<DeleteActivity> deleteActivityCommandHandler,
     ICommandHandler<MarkActivityAsCompleted> markActivityAsCompletedCommandHandler,
     ICommandHandler<MarkActivityAsIncomplete> markActivityAsIncompleteCommandHandler,
-    ICommandHandler<ChangeActivityName> changeActivityNameCommandHandler)
+    ICommandHandler<ChangeActivityName> changeActivityNameCommandHandler,
+    ICommandHandler<ChangeActivityDescription> changeActivityDescriptionCommandHandler)
     : ControllerBase
 {
     [HttpPost("addActivity")]
@@ -71,6 +72,16 @@ public class ActivityController(
         var userId = GetUserId();
         await changeActivityNameCommandHandler.HandleAsync(new ChangeActivityName(userId, request.Id,
             request.NewActivityName));
+        
+        return NoContent();
+    }
+
+    [HttpPatch("changeActivityDescription")]
+    public async Task<ActionResult> ChangeActivityDescription(ChangeActivityDescriptionRequest request)
+    {
+        var userId = GetUserId();
+        await changeActivityDescriptionCommandHandler.HandleAsync(
+            new ChangeActivityDescription(userId, request.Id, request.NewActivityDescription));
         
         return NoContent();
     }

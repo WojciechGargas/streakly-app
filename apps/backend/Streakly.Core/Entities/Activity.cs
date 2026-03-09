@@ -84,4 +84,10 @@ public class Activity
         Name = newName;
         UpdatedAt = DateTime.UtcNow;
     }
+    
+    public void ChangeDescription(string newDescription)
+    {
+        Description = newDescription;
+        UpdatedAt = DateTime.UtcNow;
+    }
 }

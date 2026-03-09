@@ -77,6 +77,14 @@ public class User
         
         activityToChangeName.ChangeName(newName);
     }
+    
+    public void ChangeActivityDescription(Guid activityToChangeDescriptionId, string newActivityDescription)
+    {
+        var activityToChangeDescription = Activities.SingleOrDefault(a => a.Id == activityToChangeDescriptionId) ??
+                                   throw new ActivityNotFoundException(activityToChangeDescriptionId);
+
+        activityToChangeDescription.ChangeDescription(newActivityDescription);
+    }
 }
 
 
