@@ -15,4 +15,16 @@ internal static class Extensions
             LastLoggedIn = entity.LastLoggedAtUtc,
             Activities = entity.Activities
         };
+    
+    public static ActivityDto AsDto(this Activity entity)
+        => new()
+        {
+            Id = entity.Id,
+            Name = entity.Name.Value,
+            Description = entity.Description.Value,
+            StartDate = entity.StartDate,
+            EndDate = entity.EndDate ?? default,
+            UpdatedAt = entity.UpdatedAt ?? entity.CreatedAt,
+            Type = entity.Type
+        };
 }

@@ -3,6 +3,8 @@ using Microsoft.AspNetCore.Mvc;
 using Streakly.Api.Exceptions;
 using Streakly.Application.Abstractions;
 using Streakly.Application.Commands.ActivityCommands;
+using Streakly.Application.DTO;
+using Streakly.Application.Queries;
 
 namespace Streakly.Api.Controllers;
 
@@ -16,14 +18,31 @@ public class ActivityController(
     ICommandHandler<MarkActivityAsCompleted> markActivityAsCompletedCommandHandler,
     ICommandHandler<MarkActivityAsIncomplete> markActivityAsIncompleteCommandHandler,
     ICommandHandler<ChangeActivityName> changeActivityNameCommandHandler,
-    ICommandHandler<ChangeActivityDescription> changeActivityDescriptionCommandHandler)
+    ICommandHandler<ChangeActivityDescription> changeActivityDescriptionCommandHandler,
+    IQueryHandler<GetActivity, ActivityDto>  getActivityHandler)
     : ControllerBase
 {
+    [HttpGet("{id:guid}")]
+    public async Task<ActionResult<ActivityDto>> GetActivityById(Guid id)
+    {
+        var userId = GetUserId();
+        var activity = await getActivityHandler.HandleAsync(new GetActivity
+        {
+            UserId = userId,
+            ActivityId = id
+        });
+
+        return activity;
+    }
+    
     [HttpPost("addActivity")]
     public async Task<ActionResult> AddActivity(AddActivityRequest request)
     {
         var userId = GetUserId();
+        var id = Guid.NewGuid();
+        
         var command = new AddActivity(
+            id,
             userId,
             request.Name,
             request.Description,
@@ -33,7 +52,7 @@ public class ActivityController(
         
         await addActivityCommandHandler.HandleAsync(command);
         
-        return NoContent();
+        return CreatedAtAction(nameof(GetActivityById), new { id = command.Id }, null);
     }
 
     [HttpDelete("deleteActivity")]

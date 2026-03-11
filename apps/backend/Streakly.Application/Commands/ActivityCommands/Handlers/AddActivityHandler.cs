@@ -15,14 +15,17 @@ public class AddActivityHandler(IUserRepository userRepository) : ICommandHandle
         var startDate = EnsureUtc(command.StartDate);
         var endDate = EnsureUtc(command.EndDate);
 
-        var activityToAdd = Activity.Create(
+        var activityToAdd = new Activity(
+            command.Id,
             user.UserId,
             command.Name,
             command.Description,
             DateTime.UtcNow,
+            null,
             startDate,
             endDate,
-            command.FrequencyType
+            command.FrequencyType,
+            false
         );
         
         user.AddActivity(activityToAdd);

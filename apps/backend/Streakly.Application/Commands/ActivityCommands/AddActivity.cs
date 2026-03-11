@@ -5,6 +5,7 @@ using Streakly.Core.ValueObjects;
 namespace Streakly.Application.Commands.ActivityCommands;
 
 public record AddActivity(
+    Guid Id,
     UserId UserId,
     ActivityName Name,
     ActivityDescription Description,
