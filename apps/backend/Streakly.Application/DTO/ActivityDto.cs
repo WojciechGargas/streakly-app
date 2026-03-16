@@ -11,4 +11,5 @@ public class ActivityDto
     public DateTime? EndDate { get; set; }
     public DateTime UpdatedAt { get; set; }
     public ActivityFrequencyType Type { get; set; }
+    public bool Completed { get; set; } 
 }

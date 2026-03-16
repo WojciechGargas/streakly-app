@@ -4,3 +4,4 @@
 **/obj/
 .vs/
 *.DotSettings.user
+/apps/backend/Streakly.sln.DotSettings.user

@@ -1,5 +1,6 @@
 using System.Net;
 using System.Net.Http.Json;
+using Streakly.Application.Commands.ActivityCommands;
 using Streakly.Application.DTO;
 using Streakly.Tests.Integration.Infrastructure;
 using Streakly.Tests.Integration.Shared;
@@ -19,7 +20,7 @@ public class ActivityControllerTests(ApplicationWebFactory factory) : IClassFixt
     public Task DisposeAsync() => Task.CompletedTask;
 
     [Fact]
-    public async Task AddActivity_WithTokenAndCorrectData_ReturnsCreated()
+    public async Task AddActivity_WhenAuthenticatedAndCorrectData_ReturnsCreated()
     {
         //Arrange
         var userId = TestUserId;
@@ -45,7 +46,7 @@ public class ActivityControllerTests(ApplicationWebFactory factory) : IClassFixt
     }
 
     [Fact]
-    public async Task AddActivity_WithoutTokenAndCorrectData_ReturnsUnauthorized()
+    public async Task AddActivity_WhenUnauthenticatedAndCorrectData_ReturnsUnauthorized()
     {
         //Arrange
         var userId = TestUserId;
@@ -60,7 +61,7 @@ public class ActivityControllerTests(ApplicationWebFactory factory) : IClassFixt
     }
     
     [Fact]
-    public async Task AddActivity_WithTokenAndIncorrectData_ReturnsBadRequest()
+    public async Task AddActivity_WhenAuthenticatedAndIncorrectData_ReturnsBadRequest()
     {
         //Arrange
         var userId = TestUserId;
@@ -76,7 +77,7 @@ public class ActivityControllerTests(ApplicationWebFactory factory) : IClassFixt
     }
     
     [Fact]
-    public async Task DeleteActivity_WithTokenAndExistingActivityId_ReturnsNoContentAndDeletesActivity()
+    public async Task DeleteActivity_WhenAuthenticatedAndExistingActivityId_ReturnsNoContentAndDeletesActivity()
     {
         //Arrange
         var userId = TestUserId;
@@ -103,7 +104,7 @@ public class ActivityControllerTests(ApplicationWebFactory factory) : IClassFixt
     }
 
     [Fact]
-    public async Task ChangeActivityName_WithTokenAndIncorrectData_ReturnsBadRequest()
+    public async Task ChangeActivityName_WhenAuthenticatedAndIncorrectData_ReturnsBadRequest()
     {
         //Arrange
         var userId = TestUserId;
@@ -115,13 +116,43 @@ public class ActivityControllerTests(ApplicationWebFactory factory) : IClassFixt
         
         var location = postResponse.Headers.Location ?? throw new Exception("Missing Location header");
         var createdActivityId = Guid.Parse(location.Segments[^1]);
+        var changeActivityNameRequest = CreateInorrectChangeActivityNameRequest(createdActivityId);
         
         //Act
-        var changeActivityNameRequest = CreateInorrectChangeActivityNameRequest(createdActivityId);
         var patchResponse = await _backend.PatchAsJsonAsync("/activity/changeActivityName", changeActivityNameRequest);
         
         //Assert
         Assert.Equal(HttpStatusCode.BadRequest, patchResponse.StatusCode);
+    }
+
+    [Fact]
+    public async Task MarkActivityAsCompleted_WhenAuthenticated_ReturnsNoContent_AndSetsCompletedFlag()
+    {
+        //Arrange
+        var userId = TestUserId;
+        AuthTestHelper.AuthenticateByJwt(_backend, factory.Services, userId);
+        
+        var addActivityRequest = CreateCorrectAddActivityRequest();
+        var postResponse = await _backend.PostAsJsonAsync("/activity/addActivity", addActivityRequest);
+        Assert.Equal(HttpStatusCode.Created, postResponse.StatusCode);
+        Assert.NotNull(postResponse.Headers.Location);
+        
+        var createdActivityId = Guid.Parse(
+            postResponse.Headers.Location!.Segments.Last(s => !string.IsNullOrWhiteSpace(s)).TrimEnd('/'));
+        var markActivityAsCompletedRequest = new MarkActivityAsCompletedRequest(createdActivityId);
+        
+        //Act
+        var patchResponse = await _backend.PatchAsJsonAsync("/activity/markAsCompleted",
+            markActivityAsCompletedRequest);
+        
+        //Assert
+        Assert.Equal(HttpStatusCode.NoContent, patchResponse.StatusCode);
+        
+        var getResponse = await _backend.GetAsync(postResponse.Headers.Location);
+        Assert.Equal(HttpStatusCode.OK, getResponse.StatusCode);
+        var updatedActivity = await getResponse.Content.ReadFromJsonAsync<ActivityDto>();
+        Assert.NotNull(updatedActivity);
+        Assert.True(updatedActivity.Completed); 
     }
 
     private static readonly Guid TestUserId = Guid.Parse("22222222-2222-2222-2222-222222222222");

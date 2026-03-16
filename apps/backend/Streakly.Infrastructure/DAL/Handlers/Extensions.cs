@@ -25,6 +25,7 @@ internal static class Extensions
             StartDate = entity.StartDate,
             EndDate = entity.EndDate ?? default,
             UpdatedAt = entity.UpdatedAt ?? entity.CreatedAt,
-            Type = entity.Type
+            Type = entity.Type,
+            Completed = entity.Completed
         };
 }

@@ -19,7 +19,7 @@ public class ProfileControllerTests(ApplicationWebFactory factory) : IClassFixtu
     public Task DisposeAsync() => Task.CompletedTask;
 
     [Fact]
-    public async Task GetMe_WithoutToken_ReturnsUnauthorized()
+    public async Task GetMe_WhenUnauthenticated_ReturnsUnauthorized()
     {
         //Act
         var response = await _backend.GetAsync("/profile/me");
@@ -29,7 +29,7 @@ public class ProfileControllerTests(ApplicationWebFactory factory) : IClassFixtu
     }
 
     [Fact]
-    public async Task GetMe_WithToken_ReturnsCurrentUser()
+    public async Task GetMe_WhenAuthenticated_ReturnsCurrentUser()
     {
         //Arrange
         var expectedUserId = Guid.Parse("22222222-2222-2222-2222-222222222222");
@@ -47,7 +47,7 @@ public class ProfileControllerTests(ApplicationWebFactory factory) : IClassFixtu
     }
 
     [Fact]
-    public async Task ChangeMyUsername_WithoutToken_ReturnsUnauthorized()
+    public async Task ChangeMyUsername_WhenUnauthenticated_ReturnsUnauthorized()
     {
         //Arrange
         var request = new
@@ -63,7 +63,7 @@ public class ProfileControllerTests(ApplicationWebFactory factory) : IClassFixtu
     }
     
     [Fact]
-    public async Task ChangeMyUsername_WithToken_UpdatesUsername()
+    public async Task ChangeMyUsername_WhenAuthenticated_UpdatesUsername()
     {
         //Arrange
         var userId = Guid.Parse("22222222-2222-2222-2222-222222222222");
@@ -90,7 +90,7 @@ public class ProfileControllerTests(ApplicationWebFactory factory) : IClassFixtu
     }
     
     [Fact]
-    public async Task ChangeMyFullname_WithoutToken_ReturnsUnauthorized()
+    public async Task ChangeMyFullname_WhenUnauthenticated_ReturnsUnauthorized()
     {
         //Arrange
         var request = new
@@ -106,7 +106,7 @@ public class ProfileControllerTests(ApplicationWebFactory factory) : IClassFixtu
     }
     
     [Fact]
-    public async Task ChangeMyFullname_WithToken_UpdatesFullname()
+    public async Task ChangeMyFullname_WhenAuthenticated_UpdatesFullname()
     {
         //Arrange
         var userId = Guid.Parse("22222222-2222-2222-2222-222222222222");
@@ -133,7 +133,7 @@ public class ProfileControllerTests(ApplicationWebFactory factory) : IClassFixtu
     }
     
     [Fact]
-    public async Task ChangeMyPassword_WithoutToken_ReturnsUnauthorized()
+    public async Task ChangeMyPassword_WhenUnauthenticated_ReturnsUnauthorized()
     {
         //Arrange
         var request = new
@@ -149,7 +149,7 @@ public class ProfileControllerTests(ApplicationWebFactory factory) : IClassFixtu
     }
     
     [Fact]
-    public async Task ChangeMyPassword_WithToken_UpdatesPassword()
+    public async Task ChangeMyPassword_WhenAuthenticated_UpdatesPassword()
     {
         //Arrange
         var newPassword = "11111111";
@@ -191,7 +191,7 @@ public class ProfileControllerTests(ApplicationWebFactory factory) : IClassFixtu
     [InlineData("1111111111111111111111111111111111111111111111111111111" +
                 "1111111111111111111111111111111111111111111111111111111111111111111" +
                 "1111111111111111111111111111111111111111111111111111111111111111111")]
-    public async Task ChangeMyPassword_WithToken_IncorrectPassword_ReturnsBadRequest(string newPassword)
+    public async Task ChangeMyPassword_WhenAuthenticatedAndIncorrectPassword_ReturnsBadRequest(string newPassword)
     {
         //Arrange
         var userId = Guid.Parse("22222222-2222-2222-2222-222222222222");
@@ -215,7 +215,7 @@ public class ProfileControllerTests(ApplicationWebFactory factory) : IClassFixtu
     }
     
     [Fact]
-    public async Task ChangeMyEmail_WithoutToken_ReturnsUnauthorized()
+    public async Task ChangeMyEmail_WhenUnauthenticated_ReturnsUnauthorized()
     {
         //Arrange
         var request = new
@@ -231,7 +231,7 @@ public class ProfileControllerTests(ApplicationWebFactory factory) : IClassFixtu
     }
     
     [Fact]
-    public async Task ChangeMyEmail_WithToken_UpdatesEmail()
+    public async Task ChangeMyEmail_WhenAuthenticated_UpdatesEmail()
     {
         //Arrange
         var newEmail = "updatedEmail@updated.test";
@@ -267,7 +267,7 @@ public class ProfileControllerTests(ApplicationWebFactory factory) : IClassFixtu
     }
     
     [Fact]
-    public async Task ChangeMyEmail_WithToken_WithInvalidEmail_ReturnsBadRequest()
+    public async Task ChangeMyEmail_WhenAuthenticatedAndInvalidEmail_ReturnsBadRequest()
     {
         //Arrange
         var newEmail = "xxx";
@@ -291,7 +291,7 @@ public class ProfileControllerTests(ApplicationWebFactory factory) : IClassFixtu
     }
 
     [Fact]
-    public async Task ChangeMyEmail_WithToken_WithAlreadyUsedEmail_ReturnsBadRequest()
+    public async Task ChangeMyEmail_WhenAuthenticatedAndAlreadyUsedEmail_ReturnsBadRequest()
     {
         //Arrange
         var newEmail = "admin@streakly.test";
@@ -315,7 +315,7 @@ public class ProfileControllerTests(ApplicationWebFactory factory) : IClassFixtu
     }
     
     [Fact]
-    public async Task ChangeMyEmail_WithToken_WithSameEmail_ReturnsBadRequest()
+    public async Task ChangeMyEmail_WhenAuthenticatedAndSameEmail_ReturnsBadRequest()
     {
         //Arrange
         var newEmail = "anna@streakly.test";
