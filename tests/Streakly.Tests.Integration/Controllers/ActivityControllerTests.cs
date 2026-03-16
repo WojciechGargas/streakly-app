@@ -102,6 +102,33 @@ public class ActivityControllerTests(ApplicationWebFactory factory) : IClassFixt
         Assert.Equal(HttpStatusCode.Created, postResponse.StatusCode);
         Assert.Equal(HttpStatusCode.NoContent, deleteResponse.StatusCode);
     }
+    
+    [Fact]
+    public async Task DeleteActivity_WhenAuthenticatedAndNonexistingActivityId_ReturnsBadRequest()
+    {
+        //Arrange
+        var userId = TestUserId;
+        AuthTestHelper.AuthenticateByJwt(_backend, factory.Services, userId);
+
+        var request = CreateCorrectAddActivityRequest();
+        
+        //Act
+        var postResponse = await _backend.PostAsJsonAsync("/activity/addActivity", request);
+        
+        var location = postResponse.Headers.Location ?? throw new Exception("Missing Location header");
+        var createdActivityId = Guid.Parse(location.Segments[^1]);
+        
+        var deleteRequest = new { id = 1 };
+        using var deleteMessage = new HttpRequestMessage(HttpMethod.Delete, "/activity/deleteActivity")
+        {
+            Content = JsonContent.Create(deleteRequest)
+        };
+        var deleteResponse = await _backend.SendAsync(deleteMessage);
+        
+        //Assert
+        Assert.Equal(HttpStatusCode.Created, postResponse.StatusCode);
+        Assert.Equal(HttpStatusCode.BadRequest, deleteResponse.StatusCode);
+    }
 
     [Fact]
     public async Task ChangeActivityName_WhenAuthenticatedAndIncorrectData_ReturnsBadRequest()
@@ -124,9 +151,36 @@ public class ActivityControllerTests(ApplicationWebFactory factory) : IClassFixt
         //Assert
         Assert.Equal(HttpStatusCode.BadRequest, patchResponse.StatusCode);
     }
+    
+    [Fact]
+    public async Task ChangeActivityName_WhenAuthenticatedAndCorrectData_ReturnsNoContent_AndUpdatesName()
+    {
+        //Arrange
+        var userId = TestUserId;
+        AuthTestHelper.AuthenticateByJwt(_backend, factory.Services, userId);
+        
+        var addActivityRequest = CreateCorrectAddActivityRequest();
+        var postResponse = await _backend.PostAsJsonAsync("/activity/addActivity", addActivityRequest);
+        Assert.Equal(HttpStatusCode.Created, postResponse.StatusCode);
+        
+        var location = postResponse.Headers.Location ?? throw new Exception("Missing Location header");
+        var createdActivityId = Guid.Parse(location.Segments[^1]);
+        var changeActivityNameRequest = CreateCorrectChangeActivityNameRequest(createdActivityId);
+        
+        //Act
+        var patchResponse = await _backend.PatchAsJsonAsync("/activity/changeActivityName", changeActivityNameRequest);
+        
+        //Assert
+        Assert.Equal(HttpStatusCode.NoContent, patchResponse.StatusCode);
+        var getResponse = await _backend.GetAsync(postResponse.Headers.Location);
+        Assert.Equal(HttpStatusCode.OK, getResponse.StatusCode);
+        var updatedActivity = await getResponse.Content.ReadFromJsonAsync<ActivityDto>();
+        Assert.NotNull(updatedActivity);
+        Assert.Equal("updated_name", updatedActivity.Name);
+    }
 
     [Fact]
-    public async Task MarkActivityAsCompleted_WhenAuthenticated_ReturnsNoContent_AndSetsCompletedFlag()
+    public async Task MarkActivityAsCompleted_WhenAuthenticated_ReturnsNoContent_AndMarksAsCompleted()
     {
         //Arrange
         var userId = TestUserId;
@@ -153,6 +207,36 @@ public class ActivityControllerTests(ApplicationWebFactory factory) : IClassFixt
         var updatedActivity = await getResponse.Content.ReadFromJsonAsync<ActivityDto>();
         Assert.NotNull(updatedActivity);
         Assert.True(updatedActivity.Completed); 
+    }
+    
+    [Fact]
+    public async Task MarkActivityAsIncompleted_WhenAuthenticated_ReturnsNoContent_AndMarksAsIncompleted()
+    {
+        //Arrange
+        var userId = TestUserId;
+        AuthTestHelper.AuthenticateByJwt(_backend, factory.Services, userId);
+        
+        var addActivityRequest = CreateCorrectAddActivityRequest();
+        var postResponse = await _backend.PostAsJsonAsync("/activity/addActivity", addActivityRequest);
+        Assert.Equal(HttpStatusCode.Created, postResponse.StatusCode);
+        Assert.NotNull(postResponse.Headers.Location);
+        
+        var createdActivityId = Guid.Parse(
+            postResponse.Headers.Location!.Segments.Last(s => !string.IsNullOrWhiteSpace(s)).TrimEnd('/'));
+        var markActivityAsCompletedRequest = new MarkActivityAsIncompleteRequest(createdActivityId);
+        
+        //Act
+        var patchResponse = await _backend.PatchAsJsonAsync("/activity/markAsIncompleted",
+            markActivityAsCompletedRequest);
+        
+        //Assert
+        Assert.Equal(HttpStatusCode.NoContent, patchResponse.StatusCode);
+        
+        var getResponse = await _backend.GetAsync(postResponse.Headers.Location);
+        Assert.Equal(HttpStatusCode.OK, getResponse.StatusCode);
+        var updatedActivity = await getResponse.Content.ReadFromJsonAsync<ActivityDto>();
+        Assert.NotNull(updatedActivity);
+        Assert.False(updatedActivity.Completed); 
     }
 
     private static readonly Guid TestUserId = Guid.Parse("22222222-2222-2222-2222-222222222222");
@@ -203,7 +287,7 @@ public class ActivityControllerTests(ApplicationWebFactory factory) : IClassFixt
         return new
         {
             Id = id,
-            Description = "updated_description"
+            NewActivityName = "updated_name"
         };
     }
     
@@ -212,7 +296,7 @@ public class ActivityControllerTests(ApplicationWebFactory factory) : IClassFixt
         return new
         {
             Id = id,
-            Description = ""
+            NewActivityName = ""
         };
     }
 }
