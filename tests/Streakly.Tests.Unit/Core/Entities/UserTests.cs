@@ -63,6 +63,7 @@ public class UserTests
         
         //Assert
         Assert.True(activity.Completed);
+        Assert.NotNull(activity.UpdatedAt);
     }
 
     [Fact]
@@ -88,8 +89,148 @@ public class UserTests
         user.MarkActivityAsCompleted(activity.Id);
         
         //Act
-        Assert.False(activity.Completed);
+        user.MarkActivityAsIncompleted(activity.Id);
         
+        //Assert
+        Assert.False(activity.Completed);
+        Assert.NotNull(activity.UpdatedAt);
+    }
+
+    [Fact]
+    public void MarkActivityAsIncompleted_WhenActivityDoesNotExist_ThrowsActivityNotFoundException()
+    {
+        //Arrange
+        var user = CreateTestUser();
+        
+        //Act
+        var exception = Record.Exception(() => user.MarkActivityAsIncompleted(Guid.NewGuid()));
+        
+        //Assert
+        Assert.IsType<ActivityNotFoundException>(exception);
+    }
+
+    [Fact]
+    public void ChangeActivityName_WhenActivityExists_UpdatesName()
+    {
+        //Arrange
+        var user = CreateTestUser();
+        var activity = CreateTestActivity(user);
+        user.AddActivity(activity);
+        
+        //Act
+        user.ChangeActivityName(activity.Id, "updated_name");
+        
+        //Assert
+        
+        Assert.Equal("updated_name", activity.Name);
+        Assert.NotNull(activity.UpdatedAt);
+    }
+
+    [Fact]
+    public void ChangeActivityName_WhenActivityDoesNotExist_ThrowsActivityNotFoundException()
+    {
+        //Arrange
+        var user = CreateTestUser();
+        
+        //Act
+        var exception = Record.Exception(() => user.ChangeActivityName(Guid.NewGuid(), "updated_name"));
+        
+        //Assert
+        Assert.IsType<ActivityNotFoundException>(exception);
+    }
+
+    [Fact]
+    public void ChangeActivityDescription_WhenActivityExists_UpdatesDescription()
+    {
+        //Arrange
+        var user = CreateTestUser();
+        var activity = CreateTestActivity(user);
+        user.AddActivity(activity);
+        
+        //Act
+        user.ChangeActivityDescription(activity.Id, "updated_description");
+        
+        //Assert
+        Assert.Equal("updated_description", activity.Description);
+        Assert.NotNull(activity.UpdatedAt);
+    }
+    [Fact]
+    public void ChangeActivityDescription_WhenActivityDoesNotExist_ThrowsActivityNotFoundException()
+    {
+        //Arrange
+        var user = CreateTestUser();
+        
+        //Act
+        var exception = Record.Exception(() => user.ChangeActivityDescription(Guid.NewGuid(), "updated_description"));
+        
+        //Assert
+        Assert.IsType<ActivityNotFoundException>(exception);
+    }
+
+    [Fact]
+    public void MarkAsLoggedIn_WhenCalled_UpdatesLastLoggedAtUtc()
+    {
+        //Arrange
+        var user = CreateTestUser();
+        var loggedAt = DateTime.UtcNow;
+        
+        //Act
+        user.MarkAsLoggedIn(loggedAt);
+        
+        //Assert
+        Assert.Equal(loggedAt, user.LastLoggedAtUtc);
+    }
+
+    [Fact]
+    public void ChangeUsername_WhenValueIsValid_UpdatesUsername()
+    {
+        //Arrange
+        var user = CreateTestUser();
+        
+        //Act
+        user.ChangeUsername("updated_username");
+        
+        //Assert
+        Assert.Equal("updated_username", user.Username);
+    }
+    
+    [Fact]
+    public void ChangeFullname_WhenValueIsValid_UpdatesFullname()
+    {
+        //Arrange
+        var user = CreateTestUser();
+        
+        //Act
+        user.ChangeFullName("updated_fullname");
+        
+        //Assert
+        Assert.Equal("updated_fullname", user.FullName);
+    }
+
+    [Fact]
+    public void ChangeEmail_WhenValueIsValid_UpdatesEmail()
+    {
+        //Arrange
+        var user = CreateTestUser();
+        
+        //Act
+        user.ChangeEmail("updatedemail@updated.com");
+        
+        //Assert
+        Assert.Equal("updatedemail@updated.com", user.Email);
+    }
+
+    [Fact]
+    public void ChangePassword_WhenValueIsValid_UpdatesPassword()
+    {
+        //Arrange
+        var user = CreateTestUser();
+        
+        //Act
+        user.ChangePassword("updated_password");
+        
+        //Assert
+        Assert.Equal("updated_password", user.Password);
     }
 
     private User CreateTestUser()
