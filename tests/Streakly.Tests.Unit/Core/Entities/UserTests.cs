@@ -1,6 +1,7 @@
 ﻿using Streakly.Core.Entities;
 using Streakly.Core.Exceptions;
 using Streakly.Core.ValueObjects;
+using Streakly.Tests.Unit.Shared;
 
 namespace Streakly.Tests.Unit.Core.Entities;
 
@@ -10,8 +11,8 @@ public class UserTests
     public void AddActivity_WhenActivityIsValid_AddsActivity()
     {
         // Arrange
-        var user =  CreateTestUser();
-        var activity = CreateTestActivity(user);
+        var user = TestData.CreateUser();
+        var activity = TestData.CreateActivity(user.UserId);
         
         //Act
         user.AddActivity(activity);
@@ -25,8 +26,8 @@ public class UserTests
     public void DeleteActivity_WhenActivityExists_RemovesActivity()
     {
         // Arrange
-        var user = CreateTestUser();
-        var activity = CreateTestActivity(user);
+        var user = TestData.CreateUser();
+        var activity = TestData.CreateActivity(user.UserId);
         user.AddActivity(activity);
         
         //Act
@@ -40,7 +41,7 @@ public class UserTests
     public void DeleteActivity_WhenActivityDoesNotExist_ThrowsActivityNotFoundException()
     {
         //Arrange
-        var user = CreateTestUser();
+        var user = TestData.CreateUser();
         var nonExistingActivityId = Guid.NewGuid();
         
         //Act
@@ -54,8 +55,8 @@ public class UserTests
     public void MarkActivityAsCompleted_WhenActivityExists_SetsCompletedTrue()
     {
         //Arrange
-        var user = CreateTestUser();
-        var activity = CreateTestActivity(user);
+        var user = TestData.CreateUser();
+        var activity = TestData.CreateActivity(user.UserId);
         user.AddActivity(activity);
         
         //Act
@@ -70,7 +71,7 @@ public class UserTests
     public void MarkActivityAsCompleted_WhenActivityDoesNotExist_ThrowsActivityNotFoundException()
     {
         //Arrange
-        var user = CreateTestUser();
+        var user = TestData.CreateUser();
         
         //Act
         var exception = Record.Exception(() => user.MarkActivityAsCompleted(Guid.NewGuid()));
@@ -83,8 +84,8 @@ public class UserTests
     public void MarkActivityAsIncompleted_WhenActivityExists_SetsCompletedFalse()
     {
         //Arrange
-        var user = CreateTestUser();
-        var activity = CreateTestActivity(user);
+        var user = TestData.CreateUser();
+        var activity = TestData.CreateActivity(user.UserId);
         user.AddActivity(activity);
         user.MarkActivityAsCompleted(activity.Id);
         
@@ -100,7 +101,7 @@ public class UserTests
     public void MarkActivityAsIncompleted_WhenActivityDoesNotExist_ThrowsActivityNotFoundException()
     {
         //Arrange
-        var user = CreateTestUser();
+        var user = TestData.CreateUser();
         
         //Act
         var exception = Record.Exception(() => user.MarkActivityAsIncompleted(Guid.NewGuid()));
@@ -113,8 +114,8 @@ public class UserTests
     public void ChangeActivityName_WhenActivityExists_UpdatesName()
     {
         //Arrange
-        var user = CreateTestUser();
-        var activity = CreateTestActivity(user);
+        var user = TestData.CreateUser();
+        var activity = TestData.CreateActivity(user.UserId);
         user.AddActivity(activity);
         
         //Act
@@ -130,7 +131,7 @@ public class UserTests
     public void ChangeActivityName_WhenActivityDoesNotExist_ThrowsActivityNotFoundException()
     {
         //Arrange
-        var user = CreateTestUser();
+        var user = TestData.CreateUser();
         
         //Act
         var exception = Record.Exception(() => user.ChangeActivityName(Guid.NewGuid(), "updated_name"));
@@ -143,8 +144,8 @@ public class UserTests
     public void ChangeActivityDescription_WhenActivityExists_UpdatesDescription()
     {
         //Arrange
-        var user = CreateTestUser();
-        var activity = CreateTestActivity(user);
+        var user = TestData.CreateUser();
+        var activity = TestData.CreateActivity(user.UserId);
         user.AddActivity(activity);
         
         //Act
@@ -158,7 +159,7 @@ public class UserTests
     public void ChangeActivityDescription_WhenActivityDoesNotExist_ThrowsActivityNotFoundException()
     {
         //Arrange
-        var user = CreateTestUser();
+        var user = TestData.CreateUser();
         
         //Act
         var exception = Record.Exception(() => user.ChangeActivityDescription(Guid.NewGuid(), "updated_description"));
@@ -171,7 +172,7 @@ public class UserTests
     public void MarkAsLoggedIn_WhenCalled_UpdatesLastLoggedAtUtc()
     {
         //Arrange
-        var user = CreateTestUser();
+        var user = TestData.CreateUser();
         var loggedAt = DateTime.UtcNow;
         
         //Act
@@ -185,7 +186,7 @@ public class UserTests
     public void ChangeUsername_WhenValueIsValid_UpdatesUsername()
     {
         //Arrange
-        var user = CreateTestUser();
+        var user = TestData.CreateUser();
         
         //Act
         user.ChangeUsername("updated_username");
@@ -198,7 +199,7 @@ public class UserTests
     public void ChangeFullname_WhenValueIsValid_UpdatesFullname()
     {
         //Arrange
-        var user = CreateTestUser();
+        var user = TestData.CreateUser();
         
         //Act
         user.ChangeFullName("updated_fullname");
@@ -211,7 +212,7 @@ public class UserTests
     public void ChangeEmail_WhenValueIsValid_UpdatesEmail()
     {
         //Arrange
-        var user = CreateTestUser();
+        var user = TestData.CreateUser();
         
         //Act
         user.ChangeEmail("updatedemail@updated.com");
@@ -224,7 +225,7 @@ public class UserTests
     public void ChangePassword_WhenValueIsValid_UpdatesPassword()
     {
         //Arrange
-        var user = CreateTestUser();
+        var user = TestData.CreateUser();
         
         //Act
         user.ChangePassword("updated_password");
@@ -232,31 +233,5 @@ public class UserTests
         //Assert
         Assert.Equal("updated_password", user.Password);
     }
-
-    private User CreateTestUser()
-    {
-        var now = DateTime.UtcNow; 
-        return new User(
-            new UserId(Guid.NewGuid()),
-            new Email("test@streakly.test"),
-            new Username("testuser"),
-            new Password("User123!"),
-            new FullName("Test User"),
-            UserRole.User,
-            DateTime.UtcNow,
-            new List<Activity>());
-    }
     
-    private Activity CreateTestActivity(User user)
-    {
-        var now = DateTime.UtcNow; 
-        return Activity.Create(
-            user.UserId,
-            new ActivityName("Run 5 km"),
-            new ActivityDescription("Morning running"),
-            now,
-            now,
-            null,
-            ActivityFrequencyType.Daily);
-    }
 }
